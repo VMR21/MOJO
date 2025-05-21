@@ -46,17 +46,10 @@
       margin-right: 40px;
       position: relative;
     }
-    .round::after {
-      content: "";
-      position: absolute;
-      top: 0;
-      right: -20px;
-      bottom: 0;
-      width: 2px;
-      background: #444;
-    }
-    .round:last-child::after {
-      display: none;
+    .round-title {
+      text-align: center;
+      font-weight: bold;
+      margin-bottom: 10px;
     }
     .match {
       background: rgba(255, 255, 255, 0.05);
@@ -77,10 +70,13 @@
       background: #fff;
       color: #000;
     }
-    .round-title {
-      text-align: center;
-      font-weight: bold;
-      margin-bottom: 10px;
+    .connector {
+      width: 40px;
+      height: 2px;
+      background: white;
+      position: absolute;
+      right: -40px;
+      top: 50%;
     }
     .footer {
       background: #111;
@@ -169,6 +165,14 @@
           p2Mult.type = 'number';
 
           matchDiv.append(p1Name, p1Mult, vs, p2Name, p2Mult);
+
+          // draw connector to next round
+          if (r < rounds) {
+            const line = document.createElement('div');
+            line.className = 'connector';
+            matchDiv.appendChild(line);
+          }
+
           roundDiv.appendChild(matchDiv);
           matches.push({ p1Name, p1Mult, p2Name, p2Mult });
         }
