@@ -9,16 +9,16 @@
     body {
       margin: 0;
       font-family: 'Arial', sans-serif;
-      background: #05080f;
-      color: white;
+      background: #0a0a0a;
+      color: #fff;
       overflow-x: auto;
     }
     header {
       display: flex;
       align-items: center;
       padding: 20px;
-      background-color: #0a0a0a;
-      border-bottom: 1px solid #333;
+      background-color: #1f1f1f;
+      border-bottom: 2px solid #333;
     }
     header img.logo {
       height: 40px;
@@ -33,50 +33,74 @@
       margin: 2rem auto;
       padding: 0 1rem;
     }
+    .bracket-selector {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    .bracket-selector select, .bracket-selector button {
+      padding: 10px;
+      margin: 5px;
+      background: #333;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    .bracket-selector button:hover {
+      background: #444;
+    }
     .bracket {
       display: flex;
       justify-content: flex-start;
       align-items: flex-start;
       padding: 2rem 0;
+      flex-wrap: wrap;
     }
     .round {
       display: flex;
       flex-direction: column;
-      gap: 60px;
+      gap: 30px;
       margin-right: 40px;
       position: relative;
     }
     .round-title {
       text-align: center;
       font-weight: bold;
+      font-size: 18px;
       margin-bottom: 10px;
+      color: #ff6347;
     }
     .match {
-      background: rgba(255, 255, 255, 0.05);
-      border: 1px solid #3a3a3a;
-      padding: 10px;
-      border-radius: 6px;
-      min-width: 160px;
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid #444;
+      padding: 15px;
+      border-radius: 8px;
+      min-width: 200px;
       text-align: center;
       position: relative;
+      transition: background-color 0.3s ease;
+    }
+    .match:hover {
+      background: rgba(255, 255, 255, 0.2);
     }
     .match input {
       width: 80%;
-      padding: 5px;
+      padding: 10px;
       margin-top: 5px;
       border-radius: 4px;
       border: none;
       text-align: center;
-      background: #fff;
-      color: #000;
+      background: #333;
+      color: white;
     }
     .connector {
-      width: 40px;
+      width: 60px;
       height: 2px;
-      background: white;
+      background: #fff;
       position: absolute;
-      right: -40px;
+      right: -50px;
       top: 50%;
+      transform: translateY(-50%);
     }
     .footer {
       background: #111;
@@ -85,17 +109,12 @@
       text-align: center;
       font-size: 0.875rem;
     }
-    .bracket-selector {
-      text-align: center;
-      margin: 20px 0;
+    .footer a {
+      color: #ff6347;
+      text-decoration: none;
     }
-    .bracket-selector select, .bracket-selector button {
-      padding: 10px;
-      margin: 5px;
-      background: #1a1a1a;
-      color: white;
-      border: 1px solid #333;
-      border-radius: 4px;
+    .footer a:hover {
+      text-decoration: underline;
     }
   </style>
 </head>
