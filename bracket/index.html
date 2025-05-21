@@ -1,226 +1,130 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>MOJOTX | Bracket Tool</title>
-  <link rel="icon" type="image/jpg" href="/assets/image.png">
-  <meta name="description" content="Exclusive wager races on Rainbet for code MOJOTX!">
-  <meta property="og:image" content="https://i.ibb.co/4nVwRPbj/Screenshot-2025-05-14-093458.png">
-  <link rel="stylesheet" type="text/css" href="/css/app.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-bracket/0.11.1/jquery.bracket.min.css">
+  <title>MOJOTX Bracket</title>
+  <link rel="icon" href="/assets/image.png">
+  <link rel="stylesheet" href="/css/app.css">
   <style>
     body {
       margin: 0;
-      font-family: Arial, sans-serif;
+      font-family: 'Arial', sans-serif;
+      background: #05080f;
       color: white;
-      background-color: #05080f;
       overflow-x: hidden;
     }
-
-    canvas#particleCanvas {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      z-index: -1;
-    }
-
-    .glow-container {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      z-index: -2;
-      background: radial-gradient(circle at center, rgba(0, 153, 255, 0.05), transparent);
-    }
-
-    object#leftsvg, object#rightsvg {
-      position: fixed;
-      top: 0;
-      height: 100%;
-      z-index: -1;
-      pointer-events: none;
-    }
-
-    object#leftsvg {
-      left: 0;
-    }
-
-    object#rightsvg {
-      right: 0;
-    }
-
-    .logo-title {
+    header {
       display: flex;
       align-items: center;
       padding: 20px;
+      background-color: #0a0a0a;
+      border-bottom: 1px solid #333;
     }
-
-    .logo-title img.logo {
+    header img.logo {
       height: 40px;
-      margin-right: 10px;
+      margin-right: 15px;
     }
-
     .title {
       font-size: 24px;
       font-weight: bold;
     }
-
     .container {
-      max-width: 1000px;
-      margin: auto;
-      padding: 2rem;
+      max-width: 1200px;
+      margin: 2rem auto;
+      padding: 0 1rem;
     }
-
-    #bracket {
+    .bracket {
+      display: flex;
+      justify-content: center;
+      flex-wrap: nowrap;
+      overflow-x: auto;
+      padding: 2rem 0;
+    }
+    .round {
+      display: flex;
+      flex-direction: column;
+      margin: 0 20px;
+      gap: 20px;
+    }
+    .match {
       background: rgba(255, 255, 255, 0.05);
-      border-radius: 10px;
-      padding: 20px;
-    }
-
-    select, button {
-      margin-top: 10px;
+      border: 1px solid #3a3a3a;
       padding: 10px;
-      border: none;
-      border-radius: 4px;
-    }
-
-    #finalWinner {
-      font-size: 1.5rem;
-      color: gold;
+      border-radius: 6px;
+      min-width: 160px;
       text-align: center;
-      margin-top: 20px;
     }
-
-    .row.inner-footer {
-      background: #111;
-      padding: 2rem;
-      display: flex;
-      justify-content: space-between;
-      flex-wrap: wrap;
+    .match input {
+      width: 80%;
+      padding: 5px;
+      margin-top: 5px;
+      border-radius: 4px;
+      border: none;
+      text-align: center;
     }
-
-    .row.inner-footer .col {
-      margin-bottom: 20px;
-    }
-
-    .footer-socials a.social {
-      display: flex;
-      align-items: center;
-      text-decoration: none;
-      color: white;
+    .round-title {
+      text-align: center;
+      font-weight: bold;
       margin-bottom: 10px;
     }
-
-    .footer-socials .social-img {
-      width: 22px;
-      height: 22px;
-      margin-right: 10px;
+    .footer {
+      background: #111;
+      padding: 2rem;
+      color: white;
+      text-align: center;
+      font-size: 0.875rem;
     }
   </style>
 </head>
-
 <body>
-  <canvas id="particleCanvas"></canvas>
-  <div class="glow-container"></div>
-  <object type="image/png" data="/assets/left-rainbet.png" id="leftsvg"></object>
-  <object type="image/png" data="/assets/right-rainbet.png" id="rightsvg"></object>
-
   <header>
-    <nav>
-      <div class="logo-title">
-        <img src="/assets/image.png" alt="Site logo" class="logo">
-        <h1 class="title">MOJOTX</h1>
-      </div>
-    </nav>
+    <img src="/assets/image.png" alt="MOJOTX" class="logo">
+    <span class="title">MOJOTX Bracket</span>
   </header>
 
   <div class="container">
-    <h2 style="text-align:center">Tournament Bracket</h2>
-    <label>Select Bracket Size:</label>
-    <select id="bracketSize">
-      <option value="4">4 Players</option>
-      <option value="8">8 Players</option>
-      <option value="16">16 Players</option>
-    </select>
-    <button onclick="generateBracket()">Generate Bracket</button>
-    <div id="bracket"></div>
-    <div id="finalWinner"></div>
-  </div>
-
-  <div class="row inner-footer">
-    <div class="col">
-      <span class="title">Socials</span>
-      <div class="footer-socials">
-        <a href="https://kick.com/MOJOTX" target="_blank" class="social">
-          <img src="/assets/kick.png" alt="Kick Logo" class="social-img">
-          <span>Kick</span>
-        </a>
-        <a href="https://x.com/MOJOTX_" target="_blank" class="social">
-          <img src="/assets/x.png" alt="X Logo" class="social-img">
-          <span>X</span>
-        </a>
-        <a href="https://instagram.com/mojotxkick" target="_blank" class="social">
-          <img src="/assets/instagram.png" alt="Instagram Logo" class="social-img">
-          <span>Instagram</span>
-        </a>
-        <a href="https://youtube.com/@mojotxgambles" target="_blank" class="social">
-          <img src="/assets/youtube.png" alt="YouTube Logo" class="social-img">
-          <span>YouTube</span>
-        </a>
-        <a href="https://discord.com/invite/MOJO" target="_blank" class="social">
-          <img src="/assets/discord.png" alt="Discord Logo" class="social-img">
-          <span>Discord</span>
-        </a>
+    <h2 style="text-align:center">Knockout Bracket (4 Players)</h2>
+    <div class="bracket">
+      <div class="round">
+        <div class="round-title">Round 1</div>
+        <div class="match">
+          <div><input type="text" placeholder="Player 1"></div>
+          <div><input type="text" placeholder="Multiplier"></div>
+          <div>vs</div>
+          <div><input type="text" placeholder="Player 2"></div>
+          <div><input type="text" placeholder="Multiplier"></div>
+        </div>
+        <div class="match">
+          <div><input type="text" placeholder="Player 3"></div>
+          <div><input type="text" placeholder="Multiplier"></div>
+          <div>vs</div>
+          <div><input type="text" placeholder="Player 4"></div>
+          <div><input type="text" placeholder="Multiplier"></div>
+        </div>
+      </div>
+      <div class="round">
+        <div class="round-title">Final</div>
+        <div class="match">
+          <div><input type="text" placeholder="Winner 1"></div>
+          <div><input type="text" placeholder="Multiplier"></div>
+          <div>vs</div>
+          <div><input type="text" placeholder="Winner 2"></div>
+          <div><input type="text" placeholder="Multiplier"></div>
+        </div>
+      </div>
+      <div class="round">
+        <div class="round-title">Champion</div>
+        <div class="match">
+          <div><input type="text" placeholder="Winner"></div>
+        </div>
       </div>
     </div>
-    <div class="col">
-      <span class="title">Info</span><br>
-      <a href="/">Terms of Service</a><br>
-      <a href="/">Privacy Policy</a>
-    </div>
-    <div class="col">
-      <span class="title">BeGambleAware.com</span>
-      <p style="font-size: 12px; max-width: 200px;">Gamble responsibly. We are not responsible for any losses caused by gambling.</p>
-    </div>
   </div>
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-bracket/0.11.1/jquery.bracket.min.js"></script>
-  <script src="/js/particles.js"></script>
-  <script>
-    function generateBracket() {
-      setTimeout(() => {
-        const size = parseInt(document.getElementById("bracketSize").value);
-        const teams = [];
-        for (let i = 0; i < size; i += 2) {
-          teams.push([`Team ${i + 1}`, `Team ${i + 2}`]);
-        }
-        $("#bracket").empty();
-        $("#bracket").bracket({
-          init: {
-            teams: teams,
-            results: []
-          },
-          save: function () { },
-          decorator: {
-            edit: function (container, data, doneCb) {
-              const input = $('<input type="text">');
-              input.val(data);
-              input.blur(function () {
-                doneCb(input.val());
-              });
-              container.html(input);
-              input.focus();
-            }
-          }
-        });
-      }, 50);
-    }
-  </script>
+  <div class="footer">
+    © 2025 MOJOTX — All Rights Reserved<br>
+    Follow us on Kick, X, Instagram, YouTube, and Discord
+  </div>
 </body>
 </html>
