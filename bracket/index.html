@@ -1,10 +1,19 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MOJOTX Tournament Bracket</title>
+    <title>MOJOTX</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Exclusive wager races on Rainbet for code MOJOTX!">
+    <meta property="og:image" content="https://i.ibb.co/4nVwRPbj/Screenshot-2025-05-14-093458.png">
+    <link rel="icon" type="image/jpg" href="/assets/image.png">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
+    <link rel="stylesheet" type="text/css" href="/css/app.css">
+    <link rel="stylesheet" type="text/css" href="/css/lb.css">
+    <link rel="stylesheet" type="text/css" href="/css/vendor.css">
+    <link rel="stylesheet" type="text/css" href="/css/cards.css">
+    <link rel="stylesheet" type="text/css" href="/css/toast.css">
     <style>
         body {
             font-family: 'Arial', sans-serif;
@@ -41,7 +50,8 @@
             margin: 30px 0 20px;
         }
 
-        .bracket-selector select, .bracket-selector button {
+        .bracket-selector select,
+        .bracket-selector button {
             padding: 10px;
             margin: 5px;
             background: #333;
@@ -129,133 +139,214 @@
 
 <body>
 
-<header>
-    <div class="logo-title">
-        <img src="/assets/logo.png" alt="MOJOTX Logo">
-        <h1 class="title">MOJOTX Tournament Bracket</h1>
+    <header>
+        <div class="logo-title">
+            <img src="/assets/image.png" alt="MOJOTX Logo">
+            <h1 class="title">MOJOTX Tournament Bracket</h1>
+        </div>
+    </header>
+
+    <div class="bracket-selector">
+        <label for="bracketSize">Select Bracket Size: </label>
+        <select id="bracketSize">
+            <option value="4">4 Players</option>
+            <option value="8">8 Players</option>
+            <option value="16">16 Players</option>
+        </select>
+        <button onclick="generateBracket()">Generate Bracket</button>
     </div>
-</header>
 
-<div class="bracket-selector">
-    <label for="bracketSize">Select Bracket Size: </label>
-    <select id="bracketSize">
-        <option value="4">4 Players</option>
-        <option value="8">8 Players</option>
-        <option value="16">16 Players</option>
-    </select>
-    <button onclick="generateBracket()">Generate Bracket</button>
-</div>
+    <div id="bracketContainer" class="bracket-container"></div>
 
-<div id="bracketContainer" class="bracket-container"></div>
+    <footer>
+        <div class="socials">
+            <a href="https://kick.com/MOJOTX" target="_blank">Kick</a>
+            <a href="https://x.com/MOJOTX_" target="_blank">X</a>
+            <a href="https://instagram.com/mojotxkick" target="_blank">Instagram</a>
+            <a href="https://youtube.com/@ProjectGamba" target="_blank">YouTube</a>
+            <a href="https://discord.com/invite/kq6Sc3AwX4" target="_blank">Discord</a>
+        </div>
+        <p>&copy; 2025 MOJOTX - All Rights Reserved</p>
+    </footer>
 
-<footer>
-    <div class="socials">
-        <a href="https://kick.com/MOJOTX" target="_blank">Kick</a>
-        <a href="https://x.com/MOJOTX_" target="_blank">X</a>
-        <a href="https://instagram.com/mojotxkick" target="_blank">Instagram</a>
-        <a href="https://youtube.com/@ProjectGamba" target="_blank">YouTube</a>
-        <a href="https://discord.com/invite/kq6Sc3AwX4" target="_blank">Discord</a>
+    <canvas id="particleCanvas"></canvas>
+    <div class="glow-container">
+        <div class="left-glow"></div>
+        <div class="right-glow"></div>
     </div>
-    <p>&copy; 2025 MOJOTX - All Rights Reserved</p>
-</footer>
+    <object type="image/png" data="/assets/left-rainbet.png" id="leftsvg" height="100%"></object>
+    <object type="image/png" data="/assets/right-rainbet.png" id="rightsvg" height="100%"></object>
 
-<script>
-    class TournamentBracket {
-        constructor(size) {
-            this.size = size;
-            this.rounds = [];
-            this.players = [];
-        }
+    <script src="https://cdn.jsdelivr.net/npm/particles.js"></script>
+    <script>
+        particlesJS('particleCanvas', {
+            particles: {
+                number: {
+                    value: 50,
+                    density: {
+                        enable: true,
+                        value_area: 800
+                    }
+                },
+                color: {
+                    value: "#ff6347"
+                },
+                shape: {
+                    type: "circle",
+                    stroke: {
+                        width: 0,
+                        color: "#000000"
+                    },
+                    polygon: {
+                        nb_sides: 5
+                    }
+                },
+                opacity: {
+                    value: 0.5,
+                    random: true,
+                    anim: {
+                        enable: true,
+                        speed: 1,
+                        opacity_min: 0.1,
+                        sync: false
+                    }
+                },
+                size: {
+                    value: 3,
+                    random: true,
+                    anim: {
+                        enable: false,
+                        speed: 40,
+                        size_min: 0.1,
+                        sync: false
+                    }
+                },
+                line_linked: {
+                    enable: true,
+                    distance: 150,
+                    color: "#ff6347",
+                    opacity: 0.4,
+                    width: 1
+                },
+                move: {
+                    enable: true,
+                    speed: 6,
+                    direction: "none",
+                    random: true,
+                    straight: false,
+                    out_mode: "out",
+                    bounce: false,
+                    attract: {
+                        enable: false,
+                        rotateX: 600,
+                        rotateY: 1200
+                    }
+                }
+            },
+            interactivity: {
+                detect_on: "canvas",
+                events: {
+                    onhover: {
+                        enable: true,
+                        mode: "repulse"
+                    },
+                    onclick: {
+                        enable: true,
+                        mode: "push"
+                    },
+                    resize: true
+                }
+            },
+            retina_detect: true
+        });
+    </script>
 
-        // Generate the bracket structure
-        generate() {
-            this.players = [];
-            for (let i = 1; i <= this.size; i++) {
-                this.players.push(`Player ${i}`);
+    <script>
+        class TournamentBracket {
+            constructor(size) {
+                this.size = size;
+                this.rounds = [];
+                this.players = [];
             }
 
-            // Create initial matches for the first round
-            let currentRound = [];
-            for (let i = 0; i < this.players.length; i += 2) {
-                currentRound.push({ p1: this.players[i], p2: this.players[i + 1] });
-            }
-
-            // Push the first round to rounds
-            this.rounds.push({ matches: currentRound });
-
-            // Create subsequent rounds
-            while (currentRound.length > 1) {
-                currentRound = this.createNextRound(currentRound);
-                this.rounds.push({ matches: currentRound });
-            }
-        }
-
-        // Create the next round by selecting winners from the current round
-        createNextRound(previousRound) {
-            let nextRound = [];
-            for (let i = 0; i < previousRound.length; i++) {
-                const match = previousRound[i];
-                nextRound.push({ p1: match.p1, p2: match.p2 });
-            }
-            return nextRound;
-        }
-    }
-
-    // Generate the bracket on button click
-    function generateBracket() {
-        const size = parseInt(document.getElementById('bracketSize').value);
-        const container = document.getElementById('bracketContainer');
-        container.innerHTML = ''; // Clear previous bracket
-
-        // Create a new instance of the TournamentBracket class
-        const tournament = new TournamentBracket(size);
-
-        // Generate the bracket structure
-        tournament.generate();
-
-        // Generate HTML for each round
-        tournament.rounds.forEach((round, rIdx) => {
-            const roundDiv = document.createElement('div');
-            roundDiv.className = 'round';
-            const title = document.createElement('div');
-            title.className = 'round-title';
-            title.textContent = rIdx === tournament.rounds.length - 1 ? 'Champion' : `Round ${rIdx + 1}`;
-            roundDiv.appendChild(title);
-
-            round.matches.forEach((match, idx) => {
-                const matchDiv = document.createElement('div');
-                matchDiv.className = 'match';
-
-                // Create player name and multiplier input fields
-                const p1Name = document.createElement('input');
-                p1Name.placeholder = match.p1;
-                const p1Mult = document.createElement('input');
-                p1Mult.type = 'number';
-
-                const vs = document.createElement('div');
-                vs.textContent = 'vs';
-
-                const p2Name = document.createElement('input');
-                p2Name.placeholder = match.p2;
-                const p2Mult = document.createElement('input');
-                p2Mult.type = 'number';
-
-                matchDiv.append(p1Name, p1Mult, vs, p2Name, p2Mult);
-
-                // Add connectors between rounds
-                if (rIdx < tournament.rounds.length - 1) {
-                    const line = document.createElement('div');
-                    line.className = 'connector';
-                    matchDiv.appendChild(line);
+            generate() {
+                this.players = [];
+                for (let i = 1; i <= this.size; i++) {
+                    this.players.push(`Player ${i}`);
                 }
 
-                roundDiv.appendChild(matchDiv);
-            });
+                let currentRound = [];
+                for (let i = 0; i < this.players.length; i += 2) {
+                    currentRound.push({ p1: this.players[i], p2: this.players[i + 1] });
+                }
 
-            container.appendChild(roundDiv);
-        });
-    }
-</script>
+                this.rounds.push({ matches: currentRound });
+
+                while (currentRound.length > 1) {
+                    currentRound = this.createNextRound(currentRound);
+                    this.rounds.push({ matches: currentRound });
+                }
+            }
+
+            createNextRound(previousRound) {
+                let nextRound = [];
+                for (let i = 0; i < previousRound.length; i++) {
+                    const match = previousRound[i];
+                    nextRound.push({ p1: match.p1, p2: match.p2 });
+                }
+                return nextRound;
+            }
+        }
+
+        function generateBracket() {
+            const size = parseInt(document.getElementById('bracketSize').value);
+            const container = document.getElementById('bracketContainer');
+            container.innerHTML = ''; 
+
+            const tournament = new TournamentBracket(size);
+            tournament.generate();
+
+            tournament.rounds.forEach((round, rIdx) => {
+                const roundDiv = document.createElement('div');
+                roundDiv.className = 'round';
+                const title = document.createElement('div');
+                title.className = 'round-title';
+                title.textContent = rIdx === tournament.rounds.length - 1 ? 'Champion' : `Round ${rIdx + 1}`;
+                roundDiv.appendChild(title);
+
+                round.matches.forEach((match) => {
+                    const matchDiv = document.createElement('div');
+                    matchDiv.className = 'match';
+
+                    const p1Name = document.createElement('input');
+                    p1Name.placeholder = match.p1;
+                    const p1Mult = document.createElement('input');
+                    p1Mult.type = 'number';
+
+                    const vs = document.createElement('div');
+                    vs.textContent = 'vs';
+
+                    const p2Name = document.createElement('input');
+                    p2Name.placeholder = match.p2;
+                    const p2Mult = document.createElement('input');
+                    p2Mult.type = 'number';
+
+                    matchDiv.append(p1Name, p1Mult, vs, p2Name, p2Mult);
+
+                    if (rIdx < tournament.rounds.length - 1) {
+                        const line = document.createElement('div');
+                        line.className = 'connector';
+                        matchDiv.appendChild(line);
+                    }
+
+                    roundDiv.appendChild(matchDiv);
+                });
+
+                container.appendChild(roundDiv);
+            });
+        }
+    </script>
 
 </body>
+
 </html>
