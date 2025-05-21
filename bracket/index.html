@@ -1,269 +1,262 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>MOJOTX Bracket</title>
-  <link rel="icon" href="/assets/image.png" />
-  <style>
-    body {
-      margin: 0;
-      font-family: 'Arial', sans-serif;
-      background: #0a0a0a;
-      color: #fff;
-      overflow-x: auto;
-    }
-    header {
-      display: flex;
-      align-items: center;
-      padding: 20px;
-      background-color: #1f1f1f;
-      border-bottom: 2px solid #333;
-    }
-    header img.logo {
-      height: 40px;
-      margin-right: 15px;
-    }
-    .title {
-      font-size: 24px;
-      font-weight: bold;
-    }
-    .container {
-      max-width: 1200px;
-      margin: 2rem auto;
-      padding: 0 1rem;
-    }
-    .bracket-selector {
-      text-align: center;
-      margin-bottom: 20px;
-    }
-    .bracket-selector select, .bracket-selector button {
-      padding: 10px;
-      margin: 5px;
-      background: #333;
-      color: white;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-    }
-    .bracket-selector button:hover {
-      background: #444;
-    }
-    .bracket {
-      display: flex;
-      justify-content: flex-start;
-      align-items: flex-start;
-      padding: 2rem 0;
-      flex-wrap: wrap;
-    }
-    .round {
-      display: flex;
-      flex-direction: column;
-      gap: 30px;
-      margin-right: 40px;
-      position: relative;
-    }
-    .round-title {
-      text-align: center;
-      font-weight: bold;
-      font-size: 18px;
-      margin-bottom: 10px;
-      color: #ff6347;
-    }
-    .match {
-      background: rgba(255, 255, 255, 0.1);
-      border: 1px solid #444;
-      padding: 15px;
-      border-radius: 8px;
-      min-width: 200px;
-      text-align: center;
-      position: relative;
-      transition: background-color 0.3s ease;
-    }
-    .match:hover {
-      background: rgba(255, 255, 255, 0.2);
-    }
-    .match input {
-      width: 80%;
-      padding: 10px;
-      margin-top: 5px;
-      border-radius: 4px;
-      border: none;
-      text-align: center;
-      background: #333;
-      color: white;
-    }
-    .connector {
-      width: 60px;
-      height: 2px;
-      background: #fff;
-      position: absolute;
-      right: -50px;
-      top: 50%;
-      transform: translateY(-50%);
-    }
-    .footer {
-      background: #111;
-      padding: 2rem;
-      color: white;
-      text-align: center;
-      font-size: 0.875rem;
-    }
-    .footer a {
-      color: #ff6347;
-      text-decoration: none;
-    }
-    .footer a:hover {
-      text-decoration: underline;
-    }
-  </style>
-</head>
-<body>
-  <header>
-    <img src="/assets/image.png" alt="MOJOTX" class="logo" />
-    <span class="title">MOJOTX Bracket</span>
-  </header>
-
-  <div class="container">
-    <div class="bracket-selector">
-      <label for="bracketSize">Select Bracket Size: </label>
-      <select id="bracketSize">
-        <option value="4">4 Players</option>
-        <option value="8">8 Players</option>
-        <option value="16">16 Players</option>
-      </select>
-      <button onclick="generateBracket()">Generate Bracket</button>
-      <button onclick="saveBracket()">💾 Save</button>
-      <button onclick="loadBracket()">📂 Load</button>
-      <a href="?view=public" target="_blank">🔗 OBS View</a>
-    </div>
-    <div id="bracketContainer" class="bracket"></div>
-  </div>
-
-  <div class="footer">
-    © 2025 MOJOTX — All Rights Reserved<br/>
-    Follow us on Kick, X, Instagram, YouTube, and Discord
-  </div>
-
-  <script>
-    let roundsData = [];
-
-    function generateBracket() {
-      const size = parseInt(document.getElementById('bracketSize').value);
-      const container = document.getElementById('bracketContainer');
-      container.innerHTML = '';
-
-      const rounds = Math.log2(size);
-      roundsData = [];
-      let currentRound = [];
-
-      for (let i = 0; i < size; i += 2) {
-        currentRound.push({ p1: `Player ${i + 1}`, p2: `Player ${i + 2}` });
-      }
-
-      for (let r = 0; r <= rounds; r++) {
-        const roundDiv = document.createElement('div');
-        roundDiv.className = 'round';
-        const title = document.createElement('div');
-        title.className = 'round-title';
-        title.textContent = r === rounds ? 'Champion' : (r === rounds - 1 ? 'Final' : `Round ${r + 1}`);
-        roundDiv.appendChild(title);
-
-        const matches = [];
-        for (let i = 0; i < currentRound.length; i++) {
-          const match = currentRound[i];
-          const matchDiv = document.createElement('div');
-          matchDiv.className = 'match';
-
-          const p1Name = document.createElement('input');
-          p1Name.placeholder = match.p1 || '';
-          const p1Mult = document.createElement('input');
-          p1Mult.type = 'number';
-
-          const vs = document.createElement('div');
-          vs.textContent = 'vs';
-
-          const p2Name = document.createElement('input');
-          p2Name.placeholder = match.p2 || '';
-          const p2Mult = document.createElement('input');
-          p2Mult.type = 'number';
-
-          matchDiv.append(p1Name, p1Mult, vs, p2Name, p2Mult);
-
-          if (r < rounds) {
-            const line = document.createElement('div');
-            line.className = 'connector';
-            matchDiv.appendChild(line);
-          }
-
-          roundDiv.appendChild(matchDiv);
-          matches.push({ p1Name, p1Mult, p2Name, p2Mult });
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MOJOTX Tournament Bracket</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background: #0a0a0a;
+            color: white;
         }
 
-        container.appendChild(roundDiv);
-        roundsData.push(matches);
-        currentRound = new Array(matches.length / 2).fill({});
-      }
+        header {
+            display: flex;
+            justify-content: space-between;
+            padding: 20px 50px;
+            background: linear-gradient(90deg, rgba(28, 28, 28, 0.8), rgba(19, 19, 19, 0.8));
+            position: fixed;
+            width: 100%;
+            top: 0;
+            left: 0;
+            z-index: 100;
+        }
 
-      for (let r = 1; r < roundsData.length; r++) {
-        const prevRound = roundsData[r - 1];
-        const thisRound = roundsData[r];
+        header img {
+            height: 50px;
+            margin-right: 20px;
+        }
 
-        thisRound.forEach((slot, i) => {
-          const match1 = prevRound[i * 2];
-          const match2 = prevRound[i * 2 + 1];
+        header .title {
+            font-size: 30px;
+            font-weight: 700;
+        }
 
-          const getWinner = (m) => {
-            const name1 = m.p1Name.value || m.p1Name.placeholder;
-            const name2 = m.p2Name.value || m.p2Name.placeholder;
-            const mult1 = parseFloat(m.p1Mult.value);
-            const mult2 = parseFloat(m.p2Mult.value);
-            if (name1 && name2 && !isNaN(mult1) && !isNaN(mult2)) {
-              return mult1 > mult2 ? name1 : name2;
+        .bracket-selector {
+            text-align: center;
+            margin: 30px 0 20px;
+        }
+
+        .bracket-selector select,
+        .bracket-selector button {
+            padding: 10px;
+            margin: 5px;
+            background: #333;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .bracket-selector button:hover {
+            background-color: #444;
+        }
+
+        .bracket-container {
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            flex-wrap: wrap;
+            padding: 100px 50px 50px;
+        }
+
+        .round {
+            margin-right: 40px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .round-title {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            color: #ff6347;
+        }
+
+        .match {
+            background-color: rgba(255, 255, 255, 0.1);
+            border: 2px solid #444;
+            padding: 15px;
+            margin: 10px 0;
+            width: 220px;
+            text-align: center;
+            border-radius: 8px;
+            transition: background-color 0.3s ease;
+        }
+
+        .connector {
+            width: 40px;
+            height: 2px;
+            background-color: white;
+            margin: 10px auto;
+        }
+
+        .input {
+            width: 85%;
+            margin: 5px 0;
+            padding: 8px;
+            border: 1px solid #333;
+            background-color: #222;
+            color: white;
+            border-radius: 4px;
+        }
+
+        footer {
+            background: #111;
+            color: white;
+            text-align: center;
+            padding: 30px;
+            margin-top: 50px;
+        }
+
+        footer .socials a {
+            margin: 0 10px;
+            color: white;
+            font-size: 20px;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        footer .socials a:hover {
+            color: #f39c12;
+        }
+
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <div class="logo-title">
+            <img src="/assets/logo.png" alt="MOJOTX Logo">
+            <h1 class="title">MOJOTX Tournament Bracket</h1>
+        </div>
+    </header>
+
+    <div class="bracket-selector">
+        <label for="bracketSize">Select Bracket Size: </label>
+        <select id="bracketSize">
+            <option value="4">4 Players</option>
+            <option value="8">8 Players</option>
+            <option value="16">16 Players</option>
+        </select>
+        <button onclick="generateBracket()">Generate Bracket</button>
+    </div>
+
+    <div id="bracketContainer" class="bracket-container"></div>
+
+    <footer>
+        <div class="socials">
+            <a href="https://kick.com/MOJOTX" target="_blank">Kick</a>
+            <a href="https://x.com/MOJOTX_" target="_blank">X</a>
+            <a href="https://instagram.com/mojotxkick" target="_blank">Instagram</a>
+            <a href="https://youtube.com/@ProjectGamba" target="_blank">YouTube</a>
+            <a href="https://discord.com/invite/kq6Sc3AwX4" target="_blank">Discord</a>
+        </div>
+        <p>&copy; 2025 MOJOTX - All Rights Reserved</p>
+    </footer>
+
+    <script>
+        let roundsData = [];
+
+        function generateBracket() {
+            const size = parseInt(document.getElementById('bracketSize').value);
+            const container = document.getElementById('bracketContainer');
+            container.innerHTML = '';
+
+            const rounds = Math.log2(size);
+            roundsData = [];
+            let currentRound = [];
+
+            // Initialize players
+            for (let i = 0; i < size; i += 2) {
+                currentRound.push({ p1: `Player ${i + 1}`, p2: `Player ${i + 2}` });
             }
-            return '';
-          };
 
-          const update = () => {
-            slot.p1Name.value = getWinner(match1);
-            slot.p2Name.value = getWinner(match2);
-          };
+            // Create rounds
+            for (let r = 0; r <= rounds; r++) {
+                const roundDiv = document.createElement('div');
+                roundDiv.className = 'round';
+                const title = document.createElement('div');
+                title.className = 'round-title';
+                title.textContent = r === rounds ? 'Champion' : (r === rounds - 1 ? 'Final' : `Round ${r + 1}`);
+                roundDiv.appendChild(title);
 
-          [match1.p1Mult, match1.p2Mult, match2.p1Mult, match2.p2Mult].forEach(el => {
-            el.addEventListener('input', update);
-          });
-        });
-      }
-    }
+                const matches = [];
+                for (let i = 0; i < currentRound.length; i++) {
+                    const match = currentRound[i];
+                    const matchDiv = document.createElement('div');
+                    matchDiv.className = 'match';
 
-    function saveBracket() {
-      const data = roundsData.map(round => round.map(m => ({
-        p1Name: m.p1Name.value,
-        p1Mult: m.p1Mult.value,
-        p2Name: m.p2Name.value,
-        p2Mult: m.p2Mult.value
-      })));
-      localStorage.setItem('mojotx_bracket', JSON.stringify(data));
-      alert('Bracket saved!');
-    }
+                    const p1Name = document.createElement('input');
+                    p1Name.placeholder = match.p1 || '';
+                    const p1Mult = document.createElement('input');
+                    p1Mult.type = 'number';
 
-    function loadBracket() {
-      const saved = localStorage.getItem('mojotx_bracket');
-      if (!saved) return alert('No bracket data found');
-      generateBracket();
-      const data = JSON.parse(saved);
-      setTimeout(() => {
-        data.forEach((round, rIdx) => {
-          round.forEach((match, mIdx) => {
-            const current = roundsData[rIdx][mIdx];
-            current.p1Name.value = match.p1Name;
-            current.p1Mult.value = match.p1Mult;
-            current.p2Name.value = match.p2Name;
-            current.p2Mult.value = match.p2Mult;
-          });
-        });
-      }, 100);
-    }
-  </script>
+                    const vs = document.createElement('div');
+                    vs.textContent = 'vs';
+
+                    const p2Name = document.createElement('input');
+                    p2Name.placeholder = match.p2 || '';
+                    const p2Mult = document.createElement('input');
+                    p2Mult.type = 'number';
+
+                    matchDiv.append(p1Name, p1Mult, vs, p2Name, p2Mult);
+
+                    if (r < rounds) {
+                        const line = document.createElement('div');
+                        line.className = 'connector';
+                        matchDiv.appendChild(line);
+                    }
+
+                    roundDiv.appendChild(matchDiv);
+                    matches.push({ p1Name, p1Mult, p2Name, p2Mult });
+                }
+
+                container.appendChild(roundDiv);
+                roundsData.push(matches);
+                currentRound = new Array(matches.length / 2).fill({});
+            }
+
+            // Handle progression of rounds
+            for (let r = 1; r < roundsData.length; r++) {
+                const prevRound = roundsData[r - 1];
+                const thisRound = roundsData[r];
+
+                thisRound.forEach((slot, i) => {
+                    const match1 = prevRound[i * 2];
+                    const match2 = prevRound[i * 2 + 1];
+
+                    const getWinner = (m) => {
+                        const name1 = m.p1Name.value || m.p1Name.placeholder;
+                        const name2 = m.p2Name.value || m.p2Name.placeholder;
+                        const mult1 = parseFloat(m.p1Mult.value);
+                        const mult2 = parseFloat(m.p2Mult.value);
+                        if (name1 && name2 && !isNaN(mult1) && !isNaN(mult2)) {
+                            return mult1 > mult2 ? name1 : name2;
+                        }
+                        return '';
+                    };
+
+                    const update = () => {
+                        slot.p1Name.value = getWinner(match1);
+                        slot.p2Name.value = getWinner(match2);
+                    };
+
+                    [match1.p1Mult, match1.p2Mult, match2.p1Mult, match2.p2Mult].forEach(el => {
+                        el.addEventListener('input', update);
+                    });
+                });
+            }
+        }
+    </script>
+
 </body>
+
 </html>
