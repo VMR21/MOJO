@@ -120,9 +120,8 @@
       container.innerHTML = '';
 
       const rounds = Math.log2(size);
-      let matchRefs = [];
+      let roundsData = [];
 
-      // First round - generate players
       let currentRound = [];
       for (let i = 0; i < size; i += 2) {
         currentRound.push({ p1: `Player ${i+1}`, p2: `Player ${i+2}` });
@@ -137,6 +136,7 @@
         roundDiv.appendChild(title);
 
         const nextRound = [];
+        const roundMatches = [];
 
         currentRound.forEach((match, index) => {
           const matchDiv = document.createElement('div');
@@ -156,41 +156,61 @@
           matchDiv.append(p1Name, p1Mult, vs, p2Name, p2Mult);
           roundDiv.appendChild(matchDiv);
 
+          roundMatches.push({ p1Name, p1Mult, p2Name, p2Mult });
           if (r < rounds) {
-            const winner = { name: '', p1: p1Name, p1m: p1Mult, p2: p2Name, p2m: p2Mult };
-            nextRound.push(winner);
+            nextRound.push({});
           }
         });
 
-        matchRefs.push(currentRound);
         container.appendChild(roundDiv);
+        roundsData.push(roundMatches);
+        currentRound = nextRound;
+      }
 
-        currentRound = nextRound.map(w => {
-          const div = document.createElement('div');
-          div.className = 'match';
-          const winnerInput = document.createElement('input');
-          winnerInput.placeholder = 'Winner';
-          div.appendChild(winnerInput);
+      // Auto-advance logic only for later rounds (not round 0)
+      for (let r = 1; r < roundsData.length; r++) {
+        const prevRound = roundsData[r - 1];
+        const thisRound = roundsData[r];
 
-          // Bind auto-advance
-          const updateWinner = () => {
-            const m1 = parseFloat(w.p1m.value);
-            const m2 = parseFloat(w.p2m.value);
-            const n1 = w.p1.value;
-            const n2 = w.p2.value;
-            if (!isNaN(m1) && !isNaN(m2) && n1 && n2) {
-              winnerInput.value = m1 > m2 ? n1 : n2;
+        thisRound.forEach((slot, i) => {
+          const targetMatch = document.querySelectorAll('.round')[r].children[i + 1];
+          const winnerInput = targetMatch.querySelector('input');
+
+          const update = () => {
+            const p1 = prevRound[i * 2];
+            const p2 = prevRound[i * 2 + 1];
+            const name1 = p1.p1Name.value;
+            const name2 = p1.p2Name.value;
+            const name3 = p2.p1Name.value;
+            const name4 = p2.p2Name.value;
+            const m1 = parseFloat(p1.p1Mult.value);
+            const m2 = parseFloat(p1.p2Mult.value);
+            const m3 = parseFloat(p2.p1Mult.value);
+            const m4 = parseFloat(p2.p2Mult.value);
+
+            const results = [
+              { name: name1, mult: m1 },
+              { name: name2, mult: m2 },
+              { name: name3, mult: m3 },
+              { name: name4, mult: m4 },
+            ].filter(e => e.name && !isNaN(e.mult));
+
+            if (results.length >= 2) {
+              results.sort((a, b) => b.mult - a.mult);
+              winnerInput.value = results[0].name;
             }
           };
 
-          w.p1m.addEventListener('input', updateWinner);
-          w.p2m.addEventListener('input', updateWinner);
-          w.p1.addEventListener('input', updateWinner);
-          w.p2.addEventListener('input', updateWinner);
-
-          w.name = winnerInput;
-          roundDiv.appendChild(div);
-          return { p1: winnerInput, p2: null };
+          ['input'].forEach(evt => {
+            prevRound[i * 2].p1Name.addEventListener(evt, update);
+            prevRound[i * 2].p1Mult.addEventListener(evt, update);
+            prevRound[i * 2].p2Name.addEventListener(evt, update);
+            prevRound[i * 2].p2Mult.addEventListener(evt, update);
+            prevRound[i * 2 + 1].p1Name.addEventListener(evt, update);
+            prevRound[i * 2 + 1].p1Mult.addEventListener(evt, update);
+            prevRound[i * 2 + 1].p2Name.addEventListener(evt, update);
+            prevRound[i * 2 + 1].p2Mult.addEventListener(evt, update);
+          });
         });
       }
     }
