@@ -37,27 +37,16 @@
     .bracket {
       display: flex;
       justify-content: flex-start;
-      align-items: center;
+      align-items: flex-start;
       padding: 2rem 0;
+      overflow-x: auto;
     }
     .round {
       display: flex;
       flex-direction: column;
-      gap: 60px;
-      margin-right: 40px;
+      gap: 40px;
+      margin-right: 60px;
       position: relative;
-    }
-    .round::after {
-      content: "";
-      position: absolute;
-      top: 0;
-      right: -20px;
-      bottom: 0;
-      width: 2px;
-      background: #444;
-    }
-    .round:last-child::after {
-      display: none;
     }
     .match {
       background: rgba(255, 255, 255, 0.05);
@@ -186,28 +175,17 @@
 
         thisRound.forEach((slot, i) => {
           const update = () => {
-            const match1 = prevRound[i * 2];
-            const match2 = prevRound[i * 2 + 1];
-
-            const entries = [
-              { name: match1.p1Name.value || match1.p1Name.placeholder, mult: parseFloat(match1.p1Mult.value) },
-              { name: match1.p2Name.value || match1.p2Name.placeholder, mult: parseFloat(match1.p2Mult.value) },
-              { name: match2.p1Name.value || match2.p1Name.placeholder, mult: parseFloat(match2.p1Mult.value) },
-              { name: match2.p2Name.value || match2.p2Name.placeholder, mult: parseFloat(match2.p2Mult.value) },
-            ].filter(e => e.name && !isNaN(e.mult));
-
-            if (entries.length === 2) {
-              const winner = entries[0].mult > entries[1].mult ? entries[0].name : entries[1].name;
-              slot.p1Name.value = winner;
+            const match = prevRound[i];
+            const name1 = match.p1Name.value || match.p1Name.placeholder;
+            const name2 = match.p2Name.value || match.p2Name.placeholder;
+            const m1 = parseFloat(match.p1Mult.value);
+            const m2 = parseFloat(match.p2Mult.value);
+            if (name1 && name2 && !isNaN(m1) && !isNaN(m2)) {
+              slot.p1Name.value = m1 > m2 ? name1 : name2;
             }
           };
-
-          const elements = [
-            prevRound[i * 2].p1Mult, prevRound[i * 2].p2Mult,
-            prevRound[i * 2 + 1].p1Mult, prevRound[i * 2 + 1].p2Mult
-          ];
-
-          elements.forEach(el => el.addEventListener('input', update));
+          prevRound[i].p1Mult.addEventListener('input', update);
+          prevRound[i].p2Mult.addEventListener('input', update);
         });
       }
     }
