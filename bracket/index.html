@@ -10,7 +10,7 @@
     body {
       margin: 0;
       font-family: 'Arial', sans-serif;
-      background: #05080f;
+      background: #05080f; /* Keeping your background color */
       color: white;
       overflow-x: auto;
     }
@@ -30,9 +30,94 @@
       font-weight: bold;
     }
     .container {
-      max-width: 1400px; /* Wider container for more rounds */
+      max-width: 1200px;
       margin: 2rem auto;
       padding: 0 1rem;
+    }
+    .bracket {
+      display: flex;
+      justify-content: flex-start;
+      align-items: center;
+      padding: 2rem 0;
+    }
+    .round {
+      display: flex;
+      flex-direction: column;
+      /* Reduced gap between matches to make lines more compact */
+      gap: 40px; /* Adjusted from 60px to 40px for tighter lines */
+      margin-right: 60px; /* Increased margin for line drawing */
+      position: relative;
+    }
+    /* Vertical line between rounds - you already had this */
+    .round::after {
+      content: "";
+      position: absolute;
+      top: 0;
+      right: -30px; /* Half of margin-right, centered */
+      bottom: 0;
+      width: 2px;
+      background: #444;
+    }
+    .round:last-child::after {
+      display: none;
+    }
+    .match {
+      /* Make match container transparent, remove borders */
+      background: transparent; /* Changed from rgba(255, 255, 255, 0.05) */
+      border: none; /* Changed from 1px solid #3a3a3a */
+      padding: 0; /* Removed padding */
+      border-radius: 0; /* Removed border-radius */
+      min-width: 160px;
+      text-align: left; /* Align text to left for better player name flow */
+      position: relative;
+      display: flex; /* Use flexbox to stack player entries vertically */
+      flex-direction: column;
+      justify-content: space-between; /* Space out player entries */
+      height: 60px; /* Fixed height for consistent line drawing */
+    }
+
+    /* New: Container for player name and multiplier to be side-by-side */
+    .player-entry {
+        display: flex;
+        align-items: center; /* Vertically align inputs */
+        gap: 5px; /* Space between name and multiplier */
+        padding-left: 5px; /* Small indent for player text */
+        position: relative; /* Needed for pseudo-elements for lines */
+        height: 25px; /* Fixed height for each player slot */
+    }
+
+    .match input {
+      /* General input styling */
+      padding: 3px 5px; /* Reduced padding for compact look */
+      margin-top: 0; /* Remove extra margin */
+      border-radius: 4px;
+      border: 1px solid #555; /* Keep a subtle border on inputs themselves */
+      background: rgba(255, 255, 255, 0.1); /* Slightly transparent background for inputs */
+      color: #eee; /* Lighter text color */
+      text-align: left; /* Align input text left */
+      outline: none; /* Remove focus outline */
+    }
+
+    .match input[type="text"] { /* Player Name input */
+        width: 100px; /* Fixed width for consistent alignment */
+    }
+    .match input[type="number"] { /* Multiplier input */
+        width: 50px; /* Fixed width for multipliers */
+        text-align: center; /* Center number for multipliers */
+    }
+
+    .round-title {
+      text-align: left; /* Align title to the left */
+      font-weight: bold;
+      margin-bottom: 10px;
+      padding-left: 5px; /* Align with player names */
+    }
+    .footer {
+      background: #111;
+      padding: 2rem;
+      color: white;
+      text-align: center;
+      font-size: 0.875rem;
     }
     .bracket-selector {
       text-align: center;
@@ -46,148 +131,64 @@
       border: 1px solid #333;
       border-radius: 4px;
     }
-    .footer {
-      background: #111;
-      padding: 2rem;
-      color: white;
-      text-align: center;
-      font-size: 0.875rem;
-    }
 
-    /* Bracket Specific Styles */
-    :root {
-      --player-slot-height: 25px; /* Height of the line for a single player + multiplier */
-      --match-spacing: 50px; /* Vertical spacing between matches */
-      --line-color: #f0f0f0;
-      --line-thickness: 1px;
-      --horizontal-line-length: 20px;
-      --round-spacing: 60px; /* Horizontal space between rounds */
-    }
+    /* Bracket Line Styling (to mimic image_7cb864.png) */
+    .line-color {
+        background-color: #f0f0f0; /* Use a light color for lines */
+    }
 
-    .bracket {
-      display: flex;
-      justify-content: flex-start;
-      align-items: flex-start; /* Align rounds to the top */
-      padding: 2rem 0;
-    }
+    /* Horizontal line extending from each player-entry */
+    .player-entry::after {
+        content: '';
+        position: absolute;
+        height: 1px;
+        background: var(--line-color);
+        width: 20px; /* Length of the horizontal line from player */
+        right: -20px; /* Position to extend out of player-entry */
+        top: 50%;
+        transform: translateY(-50%);
+    }
 
-    .round {
-      display: flex;
-      flex-direction: column;
-      flex-shrink: 0;
-      min-width: 180px; /* Space for player name + multiplier */
-      margin-right: var(--round-spacing); /* Space for connecting lines between rounds */
-      position: relative;
-      box-sizing: border-box;
-    }
+    /* Vertical line connecting the two players in a match */
+    .match::before {
+        content: '';
+        position: absolute;
+        width: 1px;
+        background: var(--line-color);
+        right: -20px; /* Aligned with end of player-entry horizontal lines */
+        top: calc(var(--player-slot-height) / 2); /* Start from middle of first player slot */
+        height: calc(var(--player-slot-height) + 1px); /* Span to middle of second player slot */
+    }
 
-    .round:last-child {
-      margin-right: 0;
-    }
+    /* Horizontal line from the match to the next round's slot */
+    .match::after {
+        content: '';
+        position: absolute;
+        height: 1px;
+        background: var(--line-color);
+        width: 40px; /* Length of line to next round */
+        right: -60px; /* Extends past the vertical line into the next round space */
+        top: calc(var(--player-slot-height) + var(--player-slot-height) / 2); /* Midpoint of the match */
+        transform: translateY(-0.5px);
+    }
 
-    .round-title {
-      text-align: left;
-      font-weight: bold;
-      margin-bottom: 10px;
-      padding-left: 10px;
-    }
+    /* Adjustments for vertical alignment of rounds in subsequent rounds */
+    /* This is critical for getting the lines to connect properly across rounds */
+    .round:nth-child(2) { /* For the second round (e.g., Semifinals in a 4-player bracket) */
+        margin-top: calc(var(--player-slot-height) + var(--match-spacing) / 2);
+    }
+    /* For 8-player brackets, Round 3 would need a similar adjustment */
+    .round:nth-child(3) { /* For the third round (e.g., Final in an 8-player bracket) */
+        margin-top: calc(var(--player-slot-height) * 2 + var(--match-spacing) + (var(--match-spacing) / 2));
+    }
 
-    /* Match container */
-    .match {
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      position: relative;
-      background: transparent;
-      border: none;
-      padding: 0;
-      box-sizing: border-box;
-      height: calc(2 * var(--player-slot-height)); /* Height to contain two player slots */
-      margin-bottom: var(--match-spacing);
-    }
 
-    /* Player entry within a match */
-    .player-entry {
-      display: flex;
-      align-items: center;
-      justify-content: flex-start;
-      gap: 5px;
-      padding-left: 10px;
-      height: var(--player-slot-height);
-      position: relative; /* For drawing line from it */
-    }
-
-    /* Input fields */
-    .player-name, .player-multiplier {
-      background: transparent;
-      border: none;
-      color: white;
-      font-size: 1em;
-      padding: 2px 0;
-      outline: none;
-      flex-shrink: 0;
-    }
-
-    .player-name {
-      width: 100px;
-      text-align: left;
-    }
-    .player-multiplier {
-      width: 40px;
-      border-bottom: 1px solid #555; /* Subtle line under multiplier */
-      text-align: center;
-    }
-
-    /* Bracket Lines */
-
-    /* Horizontal line from each player-entry */
-    .player-entry::after {
-      content: '';
-      position: absolute;
-      height: var(--line-thickness);
-      background: var(--line-color);
-      width: var(--horizontal-line-length);
-      right: calc(-1 * var(--horizontal-line-length)); /* Extends right from the player text */
-      top: 50%;
-      transform: translateY(-50%);
-    }
-
-    /* Vertical line connecting the two players in a match (on the right side) */
-    .match::before {
-      content: '';
-  	  position: absolute;
-      width: var(--line-thickness);
-      background: var(--line-color);
-      right: calc(-1 * var(--horizontal-line-length)); /* Aligned with end of player lines */
-      top: var(--player-slot-height); /* Start from bottom of first player-entry */
-      height: var(--player-slot-height); /* Extends downwards for the height of one player slot */
-      transform-origin: top;
-    }
-
-    /* Horizontal line from the match winner to the next round's slot */
-    .match::after {
-      content: '';
-      position: absolute;
-      height: var(--line-thickness);
-      background: var(--line-color);
-      width: var(--horizontal-line-length); /* Length of the line to next round */
-      right: calc(-1 * (var(--horizontal-line-length) + var(--round-spacing))); /* Extends into the next round space */
-      top: calc(var(--player-slot-height) + var(--player-slot-height) / 2); /* Midpoint of the match */
-      transform: translateY(-0.5px);
-    }
-
-    /* Adjustments for vertical positioning of matches in subsequent rounds */
-    /* This is crucial for aligning the lines for an actual bracket */
-    .round:nth-child(2) { /* Targeting the second round (e.g., Semifinals for 4 players) */
-      margin-top: calc(var(--player-slot-height) + var(--match-spacing) / 2);
-    }
-
-    /* Hide lines from the final winner slot */
-    .round:last-child .match::after,
-    .round:last-child .player-entry::after,
-    .round:last-child .match::before {
-      display: none;
-    }
+    /* Hide lines for the final champion slot */
+    .round:last-child .match::after,
+    .round:last-child .player-entry::after,
+    .round:last-child .match::before {
+        display: none;
+    }
   </style>
 </head>
 <body>
@@ -224,7 +225,6 @@
       const roundsData = [];
       let currentRound = [];
 
-      // Initialize the first round with players
       for (let i = 0; i < size; i += 2) {
         currentRound.push({ p1: `Player ${i + 1}`, p2: `Player ${i + 2}` });
       }
@@ -243,31 +243,31 @@
           const matchDiv = document.createElement('div');
           matchDiv.className = 'match';
 
-          // Player 1 Entry
-          const p1EntryDiv = document.createElement('div');
-          p1EntryDiv.className = 'player-entry';
+            // Player 1 Entry
+            const p1EntryDiv = document.createElement('div');
+            p1EntryDiv.className = 'player-entry';
           const p1Name = document.createElement('input');
-          p1Name.className = 'player-name';
+            p1Name.className = 'player-name'; /* Added class for specific styling */
           p1Name.placeholder = match.p1 || '';
           const p1Mult = document.createElement('input');
-          p1Mult.className = 'player-multiplier';
+            p1Mult.className = 'player-multiplier'; /* Added class for specific styling */
           p1Mult.type = 'number';
-          p1Mult.min = '0';
-          p1EntryDiv.append(p1Name, p1Mult);
+            p1Mult.min = '0'; // Ensure positive multipliers
+            p1EntryDiv.append(p1Name, p1Mult);
 
-          // Player 2 Entry
-          const p2EntryDiv = document.createElement('div');
-          p2EntryDiv.className = 'player-entry';
+            // Player 2 Entry
+            const p2EntryDiv = document.createElement('div');
+            p2EntryDiv.className = 'player-entry';
           const p2Name = document.createElement('input');
-          p2Name.className = 'player-name';
+            p2Name.className = 'player-name'; /* Added class for specific styling */
           p2Name.placeholder = match.p2 || '';
           const p2Mult = document.createElement('input');
-          p2Mult.className = 'player-multiplier';
+            p2Mult.className = 'player-multiplier'; /* Added class for specific styling */
           p2Mult.type = 'number';
-          p2Mult.min = '0';
-          p2EntryDiv.append(p2Name, p2Mult);
+            p2Mult.min = '0'; // Ensure positive multipliers
+            p2EntryDiv.append(p2Name, p2Mult);
 
-          // Append player entries to the match div
+          // No "vs" element as requested
           matchDiv.append(p1EntryDiv, p2EntryDiv);
           roundDiv.appendChild(matchDiv);
           matches.push({ p1Name, p1Mult, p2Name, p2Mult });
@@ -276,7 +276,6 @@
         container.appendChild(roundDiv);
         roundsData.push(matches);
 
-        // Prepare for the next round: half the number of matches
         currentRound = new Array(Math.ceil(matches.length / 2)).fill({});
       }
 
@@ -286,9 +285,9 @@
         const thisRound = roundsData[r];
 
         thisRound.forEach((slot, i) => {
-          // Match 1 feeding into the current slot (e.g., Match 0 into slot 0, Match 2 into slot 1)
+          // Match 1 feeding into the current slot
           const match1Prev = prevRound[i * 2];
-          // Match 2 feeding into the current slot (e.g., Match 1 into slot 0, Match 3 into slot 1)
+          // Match 2 feeding into the current slot
           const match2Prev = prevRound[i * 2 + 1];
 
           const updateSlot = () => {
@@ -297,30 +296,31 @@
             if (winner1) {
               slot.p1Name.value = winner1;
             } else {
-              slot.p1Name.value = ''; // Clear if inputs are not valid
-            }
+                slot.p1Name.value = ''; // Clear if inputs are not valid
+            }
 
             // Determine winner of the second preceding match
             const winner2 = getWinner(match2Prev.p1Name, match2Prev.p1Mult, match2Prev.p2Name, match2Prev.p2Mult);
             if (winner2) {
               slot.p2Name.value = winner2;
             } else {
-              slot.p2Name.value = ''; // Clear if inputs are not valid
-            }
+                slot.p2Name.value = ''; // Clear if inputs are not valid
+            }
           };
 
-          // Helper function to determine winner
-          function getWinner(name1El, mult1El, name2El, mult2El) {
-            const n1 = name1El.value.trim() || name1El.placeholder; // Use trimmed value or placeholder
-            const m1 = parseFloat(mult1El.value);
-            const n2 = name2El.value.trim() || name2El.placeholder; // Use trimmed value or placeholder
-            const m2 = parseFloat(mult2El.value);
+            // Helper function to determine winner (using placeholder if value is empty)
+            function getWinner(name1El, mult1El, name2El, mult2El) {
+                const n1 = name1El.value.trim() || name1El.placeholder;
+                const m1 = parseFloat(mult1El.value);
+                const n2 = name2El.value.trim() || name2El.placeholder;
+                const m2 = parseFloat(mult2El.value);
 
-            if (n1 && !isNaN(m1) && n2 && !isNaN(m2)) {
-              return m1 > m2 ? n1 : n2;
-            }
-            return null; // Return null if not all data is valid
-          }
+                // Only determine winner if both names are present and multipliers are valid numbers
+                if (n1 && !isNaN(m1) && n2 && !isNaN(m2)) {
+                    return m1 > m2 ? n1 : n2;
+                }
+                return null; // Return null if not all data is valid
+            }
 
           // Attach listeners to all four inputs that affect this slot
           [match1Prev.p1Mult, match1Prev.p2Mult, match2Prev.p1Mult, match2Prev.p2Mult].forEach(el => {
