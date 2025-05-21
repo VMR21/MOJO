@@ -129,91 +129,96 @@
     Follow us on Kick, X, Instagram, YouTube, and Discord
   </div>
 
-  <script>
-    function generateBracket() {
-      const size = parseInt(document.getElementById('bracketSize').value);
-      const container = document.getElementById('bracketContainer');
-      container.innerHTML = '';
+<script>
+function generateBracket() {
+  const size = parseInt(document.getElementById('bracketSize').value);
+  const container = document.getElementById('bracketContainer');
+  container.innerHTML = '';
 
-      const rounds = Math.log2(size);
-      const roundsData = [];
-      let currentRound = [];
+  const rounds = Math.log2(size);
+  const roundsData = [];
+  let currentRound = [];
 
-      for (let i = 0; i < size; i += 2) {
-        currentRound.push({ p1: `Player ${i + 1}`, p2: `Player ${i + 2}` });
-      }
+  for (let i = 0; i < size; i += 2) {
+    currentRound.push({ p1: `Player ${i + 1}`, p2: `Player ${i + 2}` });
+  }
 
-      for (let r = 0; r <= rounds; r++) {
-        const roundDiv = document.createElement('div');
-        roundDiv.className = 'round';
-        const title = document.createElement('div');
-        title.className = 'round-title';
-        title.textContent = r === rounds ? 'Champion' : (r === rounds - 1 ? 'Final' : `Round ${r + 1}`);
-        roundDiv.appendChild(title);
+  // Build rounds
+  for (let r = 0; r <= rounds; r++) {
+    const roundDiv = document.createElement('div');
+    roundDiv.className = 'round';
+    const title = document.createElement('div');
+    title.className = 'round-title';
+    title.textContent = r === rounds ? 'Champion' : (r === rounds - 1 ? 'Final' : `Round ${r + 1}`);
+    roundDiv.appendChild(title);
 
-        const matches = [];
-        for (let i = 0; i < currentRound.length; i++) {
-          const match = currentRound[i];
-          const matchDiv = document.createElement('div');
-          matchDiv.className = 'match';
+    const matches = [];
+    for (let i = 0; i < currentRound.length; i++) {
+      const match = currentRound[i];
+      const matchDiv = document.createElement('div');
+      matchDiv.className = 'match';
 
-          const p1Name = document.createElement('input');
-          p1Name.placeholder = match.p1 || '';
-          const p1Mult = document.createElement('input');
-          p1Mult.type = 'number';
+      const p1Name = document.createElement('input');
+      p1Name.placeholder = match.p1 || '';
+      const p1Mult = document.createElement('input');
+      p1Mult.type = 'number';
 
-          const vs = document.createElement('div');
-          vs.textContent = 'vs';
+      const vs = document.createElement('div');
+      vs.textContent = 'vs';
 
-          const p2Name = document.createElement('input');
-          p2Name.placeholder = match.p2 || '';
-          const p2Mult = document.createElement('input');
-          p2Mult.type = 'number';
+      const p2Name = document.createElement('input');
+      p2Name.placeholder = match.p2 || '';
+      const p2Mult = document.createElement('input');
+      p2Mult.type = 'number';
 
-          matchDiv.append(p1Name, p1Mult, vs, p2Name, p2Mult);
-          roundDiv.appendChild(matchDiv);
-          matches.push({ p1Name, p1Mult, p2Name, p2Mult });
-        }
-
-        container.appendChild(roundDiv);
-        roundsData.push(matches);
-
-        currentRound = new Array(matches.length / 2).fill({});
-      }
-
-      for (let r = 1; r < roundsData.length; r++) {
-        const prevRound = roundsData[r - 1];
-        const thisRound = roundsData[r];
-
-        thisRound.forEach((slot, i) => {
-          const match1 = prevRound[i * 2];
-          const match2 = prevRound[i * 2 + 1];
-
-          const update = () => {
-            const getWinner = (m) => {
-              const name1 = m.p1Name.value || m.p1Name.placeholder;
-              const name2 = m.p2Name.value || m.p2Name.placeholder;
-              const mult1 = parseFloat(m.p1Mult.value);
-              const mult2 = parseFloat(m.p2Mult.value);
-              if (name1 && name2 && !isNaN(mult1) && !isNaN(mult2)) {
-                return mult1 > mult2 ? name1 : name2;
-              }
-              return '';
-            };
-
-            const winner1 = getWinner(match1);
-            const winner2 = getWinner(match2);
-
-            slot.p1Name.value = winner1;
-            slot.p2Name.value = winner2;
-          };
-
-          [match1.p1Mult, match1.p2Mult, match2.p1Mult, match2.p2Mult].forEach(el =>
-            el.addEventListener('input', update)
-          );
-        });
-      }
+      matchDiv.append(p1Name, p1Mult, vs, p2Name, p2Mult);
+      roundDiv.appendChild(matchDiv);
+      matches.push({ p1Name, p1Mult, p2Name, p2Mult });
     }
-  </script>
+
+    container.appendChild(roundDiv);
+    roundsData.push(matches);
+    currentRound = new Array(matches.length / 2).fill({});
+  }
+
+  // Setup auto-fill of winners
+  for (let r = 1; r < roundsData.length; r++) {
+    const prevRound = roundsData[r - 1];
+    const thisRound = roundsData[r];
+
+    thisRound.forEach((slot, i) => {
+      const match1 = prevRound[i * 2];
+      const match2 = prevRound[i * 2 + 1];
+
+      // Wait until elements exist in DOM
+      setTimeout(() => {
+        const getWinner = (m) => {
+          const name1 = m.p1Name.value || m.p1Name.placeholder;
+          const name2 = m.p2Name.value || m.p2Name.placeholder;
+          const mult1 = parseFloat(m.p1Mult.value);
+          const mult2 = parseFloat(m.p2Mult.value);
+          if (name1 && name2 && !isNaN(mult1) && !isNaN(mult2)) {
+            return mult1 > mult2 ? name1 : name2;
+          }
+          return '';
+        };
+
+        const update = () => {
+          const winner1 = getWinner(match1);
+          const winner2 = getWinner(match2);
+
+          if (slot.p1Name && winner1) slot.p1Name.value = winner1;
+          if (slot.p2Name && winner2) slot.p2Name.value = winner2;
+        };
+
+        [match1.p1Mult, match1.p2Mult, match2.p1Mult, match2.p2Mult].forEach(el =>
+          el.addEventListener('input', update)
+        );
+      }, 100); // Delay to ensure elements exist
+    });
+  }
+}
+</script>
+
 </body>
 </html>
