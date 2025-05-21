@@ -62,6 +62,11 @@
       border-radius: 4px;
       border: none;
       text-align: center;
+      background-color: white;
+      color: black;
+    }
+    .match input::placeholder {
+      color: #aaa;
     }
     .round-title {
       text-align: center;
@@ -138,18 +143,20 @@
         const nextRound = [];
         const roundMatches = [];
 
-        currentRound.forEach((match, index) => {
+        const matchCount = size / Math.pow(2, r + 1);
+        for (let m = 0; m < currentRound.length; m++) {
+          const match = currentRound[m];
           const matchDiv = document.createElement('div');
           matchDiv.className = 'match';
 
           const p1Name = document.createElement('input');
-          p1Name.value = match.p1 || '';
+          p1Name.placeholder = match.p1 || '';
           const p1Mult = document.createElement('input');
           p1Mult.type = 'number';
           const vs = document.createElement('div');
           vs.textContent = 'vs';
           const p2Name = document.createElement('input');
-          p2Name.value = match.p2 || '';
+          p2Name.placeholder = match.p2 || '';
           const p2Mult = document.createElement('input');
           p2Mult.type = 'number';
 
@@ -160,14 +167,14 @@
           if (r < rounds) {
             nextRound.push({});
           }
-        });
+        }
 
         container.appendChild(roundDiv);
         roundsData.push(roundMatches);
         currentRound = nextRound;
       }
 
-      // Auto-advance logic only for later rounds (not round 0)
+      // Auto-advance logic from every round
       for (let r = 1; r < roundsData.length; r++) {
         const prevRound = roundsData[r - 1];
         const thisRound = roundsData[r];
@@ -178,38 +185,23 @@
 
           const update = () => {
             const p1 = prevRound[i * 2];
-            const p2 = prevRound[i * 2 + 1];
-            const name1 = p1.p1Name.value;
-            const name2 = p1.p2Name.value;
-            const name3 = p2.p1Name.value;
-            const name4 = p2.p2Name.value;
+            const name1 = p1.p1Name.value || p1.p1Name.placeholder;
+            const name2 = p1.p2Name.value || p1.p2Name.placeholder;
             const m1 = parseFloat(p1.p1Mult.value);
             const m2 = parseFloat(p1.p2Mult.value);
-            const m3 = parseFloat(p2.p1Mult.value);
-            const m4 = parseFloat(p2.p2Mult.value);
 
-            const results = [
-              { name: name1, mult: m1 },
-              { name: name2, mult: m2 },
-              { name: name3, mult: m3 },
-              { name: name4, mult: m4 },
-            ].filter(e => e.name && !isNaN(e.mult));
-
-            if (results.length >= 2) {
-              results.sort((a, b) => b.mult - a.mult);
-              winnerInput.value = results[0].name;
+            if (name1 && name2 && !isNaN(m1) && !isNaN(m2)) {
+              const winner = m1 > m2 ? name1 : name2;
+              winnerInput.value = winner;
             }
           };
 
           ['input'].forEach(evt => {
-            prevRound[i * 2].p1Name.addEventListener(evt, update);
-            prevRound[i * 2].p1Mult.addEventListener(evt, update);
-            prevRound[i * 2].p2Name.addEventListener(evt, update);
-            prevRound[i * 2].p2Mult.addEventListener(evt, update);
-            prevRound[i * 2 + 1].p1Name.addEventListener(evt, update);
-            prevRound[i * 2 + 1].p1Mult.addEventListener(evt, update);
-            prevRound[i * 2 + 1].p2Name.addEventListener(evt, update);
-            prevRound[i * 2 + 1].p2Mult.addEventListener(evt, update);
+            const prev = prevRound[i * 2];
+            prev.p1Mult.addEventListener(evt, update);
+            prev.p2Mult.addEventListener(evt, update);
+            prev.p1Name.addEventListener(evt, update);
+            prev.p2Name.addEventListener(evt, update);
           });
         });
       }
