@@ -114,6 +114,9 @@
         <option value="16">16 Players</option>
       </select>
       <button onclick="generateBracket()">Generate Bracket</button>
+      <button onclick="saveBracket()">💾 Save</button>
+      <button onclick="loadBracket()">📂 Load</button>
+      <a href="?view=public" target="_blank">🔗 OBS View</a>
     </div>
     <div id="bracketContainer" class="bracket"></div>
   </div>
@@ -124,13 +127,15 @@
   </div>
 
   <script>
+    let roundsData = [];
+
     function generateBracket() {
       const size = parseInt(document.getElementById('bracketSize').value);
       const container = document.getElementById('bracketContainer');
       container.innerHTML = '';
 
       const rounds = Math.log2(size);
-      const roundsData = [];
+      roundsData = [];
       let currentRound = [];
 
       for (let i = 0; i < size; i += 2) {
@@ -201,10 +206,8 @@
           };
 
           const update = () => {
-            const winner1 = getWinner(match1);
-            const winner2 = getWinner(match2);
-            slot.p1Name.value = winner1;
-            slot.p2Name.value = winner2;
+            slot.p1Name.value = getWinner(match1);
+            slot.p2Name.value = getWinner(match2);
           };
 
           [match1.p1Mult, match1.p2Mult, match2.p1Mult, match2.p2Mult].forEach(el => {
@@ -212,6 +215,35 @@
           });
         });
       }
+    }
+
+    function saveBracket() {
+      const data = roundsData.map(round => round.map(m => ({
+        p1Name: m.p1Name.value,
+        p1Mult: m.p1Mult.value,
+        p2Name: m.p2Name.value,
+        p2Mult: m.p2Mult.value
+      })));
+      localStorage.setItem('mojotx_bracket', JSON.stringify(data));
+      alert('Bracket saved!');
+    }
+
+    function loadBracket() {
+      const saved = localStorage.getItem('mojotx_bracket');
+      if (!saved) return alert('No bracket data found');
+      generateBracket();
+      const data = JSON.parse(saved);
+      setTimeout(() => {
+        data.forEach((round, rIdx) => {
+          round.forEach((match, mIdx) => {
+            const current = roundsData[rIdx][mIdx];
+            current.p1Name.value = match.p1Name;
+            current.p1Mult.value = match.p1Mult;
+            current.p2Name.value = match.p2Name;
+            current.p2Mult.value = match.p2Mult;
+          });
+        });
+      }, 100);
     }
   </script>
 </body>
