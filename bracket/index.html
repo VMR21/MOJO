@@ -160,39 +160,75 @@
 </footer>
 
 <script>
-    let roundsData = [];
+    class TournamentBracket {
+        constructor(size) {
+            this.size = size;
+            this.rounds = [];
+            this.players = [];
+        }
 
+        // Generate the bracket structure
+        generate() {
+            this.players = [];
+            for (let i = 1; i <= this.size; i++) {
+                this.players.push(`Player ${i}`);
+            }
+
+            // Create initial matches for the first round
+            let currentRound = [];
+            for (let i = 0; i < this.players.length; i += 2) {
+                currentRound.push({ p1: this.players[i], p2: this.players[i + 1] });
+            }
+
+            // Push the first round to rounds
+            this.rounds.push({ matches: currentRound });
+
+            // Create subsequent rounds
+            while (currentRound.length > 1) {
+                currentRound = this.createNextRound(currentRound);
+                this.rounds.push({ matches: currentRound });
+            }
+        }
+
+        // Create the next round by selecting winners from the current round
+        createNextRound(previousRound) {
+            let nextRound = [];
+            for (let i = 0; i < previousRound.length; i++) {
+                const match = previousRound[i];
+                nextRound.push({ p1: match.p1, p2: match.p2 });
+            }
+            return nextRound;
+        }
+    }
+
+    // Generate the bracket on button click
     function generateBracket() {
         const size = parseInt(document.getElementById('bracketSize').value);
         const container = document.getElementById('bracketContainer');
-        container.innerHTML = '';
+        container.innerHTML = ''; // Clear previous bracket
 
-        const rounds = Math.log2(size);
-        roundsData = [];
-        let currentRound = [];
+        // Create a new instance of the TournamentBracket class
+        const tournament = new TournamentBracket(size);
 
-        // Initialize players
-        for (let i = 0; i < size; i += 2) {
-            currentRound.push({ p1: `Player ${i + 1}`, p2: `Player ${i + 2}` });
-        }
+        // Generate the bracket structure
+        tournament.generate();
 
-        // Create rounds
-        for (let r = 0; r <= rounds; r++) {
+        // Generate HTML for each round
+        tournament.rounds.forEach((round, rIdx) => {
             const roundDiv = document.createElement('div');
             roundDiv.className = 'round';
             const title = document.createElement('div');
             title.className = 'round-title';
-            title.textContent = r === rounds ? 'Champion' : (r === rounds - 1 ? 'Final' : `Round ${r + 1}`);
+            title.textContent = rIdx === tournament.rounds.length - 1 ? 'Champion' : `Round ${rIdx + 1}`;
             roundDiv.appendChild(title);
 
-            const matches = [];
-            for (let i = 0; i < currentRound.length; i++) {
-                const match = currentRound[i];
+            round.matches.forEach((match, idx) => {
                 const matchDiv = document.createElement('div');
                 matchDiv.className = 'match';
 
+                // Create player name and multiplier input fields
                 const p1Name = document.createElement('input');
-                p1Name.placeholder = match.p1 || '';
+                p1Name.placeholder = match.p1;
                 const p1Mult = document.createElement('input');
                 p1Mult.type = 'number';
 
@@ -200,57 +236,24 @@
                 vs.textContent = 'vs';
 
                 const p2Name = document.createElement('input');
-                p2Name.placeholder = match.p2 || '';
+                p2Name.placeholder = match.p2;
                 const p2Mult = document.createElement('input');
                 p2Mult.type = 'number';
 
                 matchDiv.append(p1Name, p1Mult, vs, p2Name, p2Mult);
 
-                if (r < rounds) {
+                // Add connectors between rounds
+                if (rIdx < tournament.rounds.length - 1) {
                     const line = document.createElement('div');
                     line.className = 'connector';
                     matchDiv.appendChild(line);
                 }
 
                 roundDiv.appendChild(matchDiv);
-                matches.push({ p1Name, p1Mult, p2Name, p2Mult });
-            }
+            });
 
             container.appendChild(roundDiv);
-            roundsData.push(matches);
-            currentRound = new Array(matches.length / 2).fill({});
-        }
-
-        // Handle progression of rounds
-        for (let r = 1; r < roundsData.length; r++) {
-            const prevRound = roundsData[r - 1];
-            const thisRound = roundsData[r];
-
-            thisRound.forEach((slot, i) => {
-                const match1 = prevRound[i * 2];
-                const match2 = prevRound[i * 2 + 1];
-
-                const getWinner = (m) => {
-                    const name1 = m.p1Name.value || m.p1Name.placeholder;
-                    const name2 = m.p2Name.value || m.p2Name.placeholder;
-                    const mult1 = parseFloat(m.p1Mult.value);
-                    const mult2 = parseFloat(m.p2Mult.value);
-                    if (name1 && name2 && !isNaN(mult1) && !isNaN(mult2)) {
-                        return mult1 > mult2 ? name1 : name2;
-                    }
-                    return '';
-                };
-
-                const update = () => {
-                    slot.p1Name.value = getWinner(match1);
-                    slot.p2Name.value = getWinner(match2);
-                };
-
-                [match1.p1Mult, match1.p2Mult, match2.p1Mult, match2.p2Mult].forEach(el => {
-                    el.addEventListener('input', update);
-                });
-            });
-        }
+        });
     }
 </script>
 
