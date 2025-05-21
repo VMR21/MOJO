@@ -1,334 +1,216 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>MOJOTX Bracket</title>
-  <link rel="icon" href="/assets/image.png">
-  <link rel="stylesheet" href="/css/app.css">
-  <style>
-    body {
-      margin: 0;
-      font-family: 'Arial', sans-serif;
-      background: #05080f; /* Keeping your background color */
-      color: white;
-      overflow-x: auto;
-    }
-    header {
-      display: flex;
-      align-items: center;
-      padding: 20px;
-      background-color: #0a0a0a;
-      border-bottom: 1px solid #333;
-    }
-    header img.logo {
-      height: 40px;
-      margin-right: 15px;
-    }
-    .title {
-      font-size: 24px;
-      font-weight: bold;
-    }
-    .container {
-      max-width: 1200px;
-      margin: 2rem auto;
-      padding: 0 1rem;
-    }
-    .bracket {
-      display: flex;
-      justify-content: flex-start;
-      align-items: center;
-      padding: 2rem 0;
-    }
-    .round {
-      display: flex;
-      flex-direction: column;
-      /* Reduced gap between matches to make lines more compact */
-      gap: 40px; /* Adjusted from 60px to 40px for tighter lines */
-      margin-right: 60px; /* Increased margin for line drawing */
-      position: relative;
-    }
-    /* Vertical line between rounds - you already had this */
-    .round::after {
-      content: "";
-      position: absolute;
-      top: 0;
-      right: -30px; /* Half of margin-right, centered */
-      bottom: 0;
-      width: 2px;
-      background: #444;
-    }
-    .round:last-child::after {
-      display: none;
-    }
-    .match {
-      /* Make match container transparent, remove borders */
-      background: transparent; /* Changed from rgba(255, 255, 255, 0.05) */
-      border: none; /* Changed from 1px solid #3a3a3a */
-      padding: 0; /* Removed padding */
-      border-radius: 0; /* Removed border-radius */
-      min-width: 160px;
-      text-align: left; /* Align text to left for better player name flow */
-      position: relative;
-      display: flex; /* Use flexbox to stack player entries vertically */
-      flex-direction: column;
-      justify-content: space-between; /* Space out player entries */
-      height: 60px; /* Fixed height for consistent line drawing */
-    }
-
-    /* New: Container for player name and multiplier to be side-by-side */
-    .player-entry {
-        display: flex;
-        align-items: center; /* Vertically align inputs */
-        gap: 5px; /* Space between name and multiplier */
-        padding-left: 5px; /* Small indent for player text */
-        position: relative; /* Needed for pseudo-elements for lines */
-        height: 25px; /* Fixed height for each player slot */
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MOJOTX Bracket</title>
+  <link rel="icon" href="/assets/image.png">
+  <link rel="stylesheet" href="/css/app.css">
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Arial', sans-serif;
+      background: #05080f;
+      color: white;
+      overflow-x: auto;
     }
-
-    .match input {
-      /* General input styling */
-      padding: 3px 5px; /* Reduced padding for compact look */
-      margin-top: 0; /* Remove extra margin */
-      border-radius: 4px;
-      border: 1px solid #555; /* Keep a subtle border on inputs themselves */
-      background: rgba(255, 255, 255, 0.1); /* Slightly transparent background for inputs */
-      color: #eee; /* Lighter text color */
-      text-align: left; /* Align input text left */
-      outline: none; /* Remove focus outline */
-    }
-
-    .match input[type="text"] { /* Player Name input */
-        width: 100px; /* Fixed width for consistent alignment */
+    header {
+      display: flex;
+      align-items: center;
+      padding: 20px;
+      background-color: #0a0a0a;
+      border-bottom: 1px solid #333;
     }
-    .match input[type="number"] { /* Multiplier input */
-        width: 50px; /* Fixed width for multipliers */
-        text-align: center; /* Center number for multipliers */
+    header img.logo {
+      height: 40px;
+      margin-right: 15px;
     }
-
-    .round-title {
-      text-align: left; /* Align title to the left */
-      font-weight: bold;
-      margin-bottom: 10px;
-      padding-left: 5px; /* Align with player names */
-    }
-    .footer {
-      background: #111;
-      padding: 2rem;
-      color: white;
-      text-align: center;
-      font-size: 0.875rem;
-    }
-    .bracket-selector {
-      text-align: center;
-      margin: 20px 0;
-    }
-    .bracket-selector select, .bracket-selector button {
-      padding: 10px;
-      margin: 5px;
-      background: #1a1a1a;
-      color: white;
-      border: 1px solid #333;
-      border-radius: 4px;
-    }
-
-    /* Bracket Line Styling (to mimic image_7cb864.png) */
-    .line-color {
-        background-color: #f0f0f0; /* Use a light color for lines */
+    .title {
+      font-size: 24px;
+      font-weight: bold;
     }
-
-    /* Horizontal line extending from each player-entry */
-    .player-entry::after {
-        content: '';
-        position: absolute;
-        height: 1px;
-        background: var(--line-color);
-        width: 20px; /* Length of the horizontal line from player */
-        right: -20px; /* Position to extend out of player-entry */
-        top: 50%;
-        transform: translateY(-50%);
+    .container {
+      max-width: 1200px;
+      margin: 2rem auto;
+      padding: 0 1rem;
     }
-
-    /* Vertical line connecting the two players in a match */
-    .match::before {
-        content: '';
-        position: absolute;
-        width: 1px;
-        background: var(--line-color);
-        right: -20px; /* Aligned with end of player-entry horizontal lines */
-        top: calc(var(--player-slot-height) / 2); /* Start from middle of first player slot */
-        height: calc(var(--player-slot-height) + 1px); /* Span to middle of second player slot */
+    .bracket {
+      display: flex;
+      justify-content: flex-start;
+      align-items: center;
+      padding: 2rem 0;
     }
-
-    /* Horizontal line from the match to the next round's slot */
-    .match::after {
-        content: '';
-        position: absolute;
-        height: 1px;
-        background: var(--line-color);
-        width: 40px; /* Length of line to next round */
-        right: -60px; /* Extends past the vertical line into the next round space */
-        top: calc(var(--player-slot-height) + var(--player-slot-height) / 2); /* Midpoint of the match */
-        transform: translateY(-0.5px);
+    .round {
+      display: flex;
+      flex-direction: column;
+      gap: 60px;
+      margin-right: 40px;
+      position: relative;
     }
-
-    /* Adjustments for vertical alignment of rounds in subsequent rounds */
-    /* This is critical for getting the lines to connect properly across rounds */
-    .round:nth-child(2) { /* For the second round (e.g., Semifinals in a 4-player bracket) */
-        margin-top: calc(var(--player-slot-height) + var(--match-spacing) / 2);
+    .round::after {
+      content: "";
+      position: absolute;
+      top: 0;
+      right: -20px;
+      bottom: 0;
+      width: 2px;
+      background: #444;
     }
-    /* For 8-player brackets, Round 3 would need a similar adjustment */
-    .round:nth-child(3) { /* For the third round (e.g., Final in an 8-player bracket) */
-        margin-top: calc(var(--player-slot-height) * 2 + var(--match-spacing) + (var(--match-spacing) / 2));
+    .round:last-child::after {
+      display: none;
     }
-
-
-    /* Hide lines for the final champion slot */
-    .round:last-child .match::after,
-    .round:last-child .player-entry::after,
-    .round:last-child .match::before {
-        display: none;
+    .match {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid #3a3a3a;
+      padding: 10px;
+      border-radius: 6px;
+      min-width: 160px;
+      text-align: center;
+      position: relative;
     }
-  </style>
+    .match input {
+      width: 80%;
+      padding: 5px;
+      margin-top: 5px;
+      border-radius: 4px;
+      border: none;
+      text-align: center;
+      background: #fff;
+      color: #000;
+    }
+    .round-title {
+      text-align: center;
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+    .footer {
+      background: #111;
+      padding: 2rem;
+      color: white;
+      text-align: center;
+      font-size: 0.875rem;
+    }
+    .bracket-selector {
+      text-align: center;
+      margin: 20px 0;
+    }
+    .bracket-selector select, .bracket-selector button {
+      padding: 10px;
+      margin: 5px;
+      background: #1a1a1a;
+      color: white;
+      border: 1px solid #333;
+      border-radius: 4px;
+    }
+  </style>
 </head>
 <body>
-  <header>
-    <img src="/assets/image.png" alt="MOJOTX" class="logo">
-    <span class="title">MOJOTX Bracket</span>
-  </header>
+  <header>
+    <img src="/assets/image.png" alt="MOJOTX" class="logo">
+    <span class="title">MOJOTX Bracket</span>
+  </header>
 
-  <div class="container">
-    <div class="bracket-selector">
-      <label for="bracketSize">Select Bracket Size: </label>
-      <select id="bracketSize">
-        <option value="4">4 Players</option>
-        <option value="8">8 Players</option>
-        <option value="16">16 Players</option>
-      </select>
-      <button onclick="generateBracket()">Generate Bracket</button>
-    </div>
-    <div id="bracketContainer" class="bracket"></div>
-  </div>
+  <div class="container">
+    <div class="bracket-selector">
+      <label for="bracketSize">Select Bracket Size: </label>
+      <select id="bracketSize">
+        <option value="4">4 Players</option>
+        <option value="8">8 Players</option>
+        <option value="16">16 Players</option>
+      </select>
+      <button onclick="generateBracket()">Generate Bracket</button>
+    </div>
+    <div id="bracketContainer" class="bracket"></div>
+  </div>
 
-  <div class="footer">
-    © 2025 MOJOTX — All Rights Reserved<br>
-    Follow us on Kick, X, Instagram, YouTube, and Discord
-  </div>
+  <div class="footer">
+    © 2025 MOJOTX — All Rights Reserved<br>
+    Follow us on Kick, X, Instagram, YouTube, and Discord
+  </div>
 
-  <script>
-    function generateBracket() {
-      const size = parseInt(document.getElementById('bracketSize').value);
-      const container = document.getElementById('bracketContainer');
-      container.innerHTML = '';
+  <script>
+    function generateBracket() {
+      const size = parseInt(document.getElementById('bracketSize').value);
+      const container = document.getElementById('bracketContainer');
+      container.innerHTML = '';
 
-      const rounds = Math.log2(size);
-      const roundsData = [];
-      let currentRound = [];
+      const rounds = Math.log2(size);
+      const roundsData = [];
+      let currentRound = [];
 
-      for (let i = 0; i < size; i += 2) {
-        currentRound.push({ p1: `Player ${i + 1}`, p2: `Player ${i + 2}` });
-      }
+      for (let i = 0; i < size; i += 2) {
+        currentRound.push({ p1: `Player ${i + 1}`, p2: `Player ${i + 2}` });
+      }
 
-      for (let r = 0; r <= rounds; r++) {
-        const roundDiv = document.createElement('div');
-        roundDiv.className = 'round';
-        const title = document.createElement('div');
-        title.className = 'round-title';
-        title.textContent = r === rounds ? 'Champion' : (r === rounds - 1 ? 'Final' : `Round ${r + 1}`);
-        roundDiv.appendChild(title);
+      for (let r = 0; r <= rounds; r++) {
+        const roundDiv = document.createElement('div');
+        roundDiv.className = 'round';
+        const title = document.createElement('div');
+        title.className = 'round-title';
+        title.textContent = r === rounds ? 'Champion' : (r === rounds - 1 ? 'Final' : `Round ${r + 1}`);
+        roundDiv.appendChild(title);
 
-        const matches = [];
-        for (let i = 0; i < currentRound.length; i++) {
-          const match = currentRound[i];
-          const matchDiv = document.createElement('div');
-          matchDiv.className = 'match';
+        const matches = [];
+        for (let i = 0; i < currentRound.length; i++) {
+          const match = currentRound[i];
+          const matchDiv = document.createElement('div');
+          matchDiv.className = 'match';
 
-            // Player 1 Entry
-            const p1EntryDiv = document.createElement('div');
-            p1EntryDiv.className = 'player-entry';
-          const p1Name = document.createElement('input');
-            p1Name.className = 'player-name'; /* Added class for specific styling */
-          p1Name.placeholder = match.p1 || '';
-          const p1Mult = document.createElement('input');
-            p1Mult.className = 'player-multiplier'; /* Added class for specific styling */
-          p1Mult.type = 'number';
-            p1Mult.min = '0'; // Ensure positive multipliers
-            p1EntryDiv.append(p1Name, p1Mult);
+          const p1Name = document.createElement('input');
+          p1Name.placeholder = match.p1 || '';
+          const p1Mult = document.createElement('input');
+          p1Mult.type = 'number';
 
-            // Player 2 Entry
-            const p2EntryDiv = document.createElement('div');
-            p2EntryDiv.className = 'player-entry';
-          const p2Name = document.createElement('input');
-            p2Name.className = 'player-name'; /* Added class for specific styling */
-          p2Name.placeholder = match.p2 || '';
-          const p2Mult = document.createElement('input');
-            p2Mult.className = 'player-multiplier'; /* Added class for specific styling */
-          p2Mult.type = 'number';
-            p2Mult.min = '0'; // Ensure positive multipliers
-            p2EntryDiv.append(p2Name, p2Mult);
+          const vs = document.createElement('div');
+          vs.textContent = 'vs';
 
-          // No "vs" element as requested
-          matchDiv.append(p1EntryDiv, p2EntryDiv);
-          roundDiv.appendChild(matchDiv);
-          matches.push({ p1Name, p1Mult, p2Name, p2Mult });
-        }
+          const p2Name = document.createElement('input');
+          p2Name.placeholder = match.p2 || '';
+          const p2Mult = document.createElement('input');
+          p2Mult.type = 'number';
 
-        container.appendChild(roundDiv);
-        roundsData.push(matches);
+          matchDiv.append(p1Name, p1Mult, vs, p2Name, p2Mult);
+          roundDiv.appendChild(matchDiv);
+          matches.push({ p1Name, p1Mult, p2Name, p2Mult });
+        }
 
-        currentRound = new Array(Math.ceil(matches.length / 2)).fill({});
-      }
+        container.appendChild(roundDiv);
+        roundsData.push(matches);
 
-      // Logic for advancing players to the next round
-      for (let r = 1; r < roundsData.length; r++) {
-        const prevRound = roundsData[r - 1];
-        const thisRound = roundsData[r];
+        currentRound = new Array(matches.length / 2).fill({});
+      }
 
-        thisRound.forEach((slot, i) => {
-          // Match 1 feeding into the current slot
-          const match1Prev = prevRound[i * 2];
-          // Match 2 feeding into the current slot
-          const match2Prev = prevRound[i * 2 + 1];
+      for (let r = 1; r < roundsData.length; r++) {
+        const prevRound = roundsData[r - 1];
+        const thisRound = roundsData[r];
 
-          const updateSlot = () => {
-            // Determine winner of the first preceding match
-            const winner1 = getWinner(match1Prev.p1Name, match1Prev.p1Mult, match1Prev.p2Name, match1Prev.p2Mult);
-            if (winner1) {
-              slot.p1Name.value = winner1;
-            } else {
-                slot.p1Name.value = ''; // Clear if inputs are not valid
-            }
+        thisRound.forEach((slot, i) => {
+          const match1 = prevRound[i * 2];
+          const match2 = prevRound[i * 2 + 1];
 
-            // Determine winner of the second preceding match
-            const winner2 = getWinner(match2Prev.p1Name, match2Prev.p1Mult, match2Prev.p2Name, match2Prev.p2Mult);
-            if (winner2) {
-              slot.p2Name.value = winner2;
-            } else {
-                slot.p2Name.value = ''; // Clear if inputs are not valid
-            }
-          };
+          const update = () => {
+            const getWinner = (match) => {
+              const name1 = match.p1Name.value || match.p1Name.placeholder;
+              const name2 = match.p2Name.value || match.p2Name.placeholder;
+              const mult1 = parseFloat(match.p1Mult.value);
+              const mult2 = parseFloat(match.p2Mult.value);
+              if (name1 && name2 && !isNaN(mult1) && !isNaN(mult2)) {
+                return mult1 > mult2 ? name1 : name2;
+              }
+              return '';
+            };
 
-            // Helper function to determine winner (using placeholder if value is empty)
-            function getWinner(name1El, mult1El, name2El, mult2El) {
-                const n1 = name1El.value.trim() || name1El.placeholder;
-                const m1 = parseFloat(mult1El.value);
-                const n2 = name2El.value.trim() || name2El.placeholder;
-                const m2 = parseFloat(mult2El.value);
+            const winner1 = getWinner(match1);
+            const winner2 = getWinner(match2);
 
-                // Only determine winner if both names are present and multipliers are valid numbers
-                if (n1 && !isNaN(m1) && n2 && !isNaN(m2)) {
-                    return m1 > m2 ? n1 : n2;
-                }
-                return null; // Return null if not all data is valid
-            }
+            if (winner1) slot.p1Name.value = winner1;
+            if (winner2) slot.p2Name.value = winner2;
+          };
 
-          // Attach listeners to all four inputs that affect this slot
-          [match1Prev.p1Mult, match1Prev.p2Mult, match2Prev.p1Mult, match2Prev.p2Mult].forEach(el => {
-            if (el) el.addEventListener('input', updateSlot);
-          });
-        });
-      }
-    }
-  </script>
+          [match1.p1Mult, match1.p2Mult, match2.p1Mult, match2.p2Mult].forEach(el => el.addEventListener('input', update));
+        });
+      }
+    }
+  </script>
 </body>
 </html>
