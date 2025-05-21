@@ -23,6 +23,8 @@
       position: fixed;
       top: 0;
       left: 0;
+      width: 100vw;
+      height: 100vh;
       z-index: -1;
     }
 
@@ -34,6 +36,22 @@
       height: 100vh;
       z-index: -2;
       background: radial-gradient(circle at center, rgba(0, 153, 255, 0.05), transparent);
+    }
+
+    object#leftsvg, object#rightsvg {
+      position: fixed;
+      top: 0;
+      height: 100%;
+      z-index: -1;
+      pointer-events: none;
+    }
+
+    object#leftsvg {
+      left: 0;
+    }
+
+    object#rightsvg {
+      right: 0;
     }
 
     .logo-title {
@@ -109,6 +127,8 @@
 <body>
   <canvas id="particleCanvas"></canvas>
   <div class="glow-container"></div>
+  <object type="image/png" data="/assets/left-rainbet.png" id="leftsvg"></object>
+  <object type="image/png" data="/assets/right-rainbet.png" id="rightsvg"></object>
 
   <header>
     <nav>
@@ -174,33 +194,33 @@
   <script src="/js/particles.js"></script>
   <script>
     function generateBracket() {
-      const size = parseInt(document.getElementById("bracketSize").value);
-      const teams = [];
-      for (let i = 0; i < size; i += 2) {
-        teams.push([`Team ${i + 1}`, `Team ${i + 2}`]);
-      }
-
-      $("#bracket").empty();
-      $("#bracket").bracket({
-        init: {
-          teams: teams,
-          results: []
-        },
-        save: function () { },
-        decorator: {
-          edit: function (container, data, doneCb) {
-            const input = $('<input type="text">');
-            input.val(data);
-            input.blur(function () {
-              doneCb(input.val());
-            });
-            container.html(input);
-            input.focus();
-          }
+      setTimeout(() => {
+        const size = parseInt(document.getElementById("bracketSize").value);
+        const teams = [];
+        for (let i = 0; i < size; i += 2) {
+          teams.push([`Team ${i + 1}`, `Team ${i + 2}`]);
         }
-      });
+        $("#bracket").empty();
+        $("#bracket").bracket({
+          init: {
+            teams: teams,
+            results: []
+          },
+          save: function () { },
+          decorator: {
+            edit: function (container, data, doneCb) {
+              const input = $('<input type="text">');
+              input.val(data);
+              input.blur(function () {
+                doneCb(input.val());
+              });
+              container.html(input);
+              input.focus();
+            }
+          }
+        });
+      }, 50);
     }
   </script>
 </body>
-
 </html>
