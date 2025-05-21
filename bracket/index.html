@@ -136,8 +136,8 @@
 
       const rounds = Math.log2(size);
       const roundsData = [];
-
       let currentRound = [];
+
       for (let i = 0; i < size; i += 2) {
         currentRound.push({ p1: `Player ${i + 1}`, p2: `Player ${i + 2}` });
       }
@@ -150,7 +150,6 @@
         title.textContent = r === rounds ? 'Champion' : (r === rounds - 1 ? 'Final' : `Round ${r + 1}`);
         roundDiv.appendChild(title);
 
-        const matchCount = size / Math.pow(2, r + 1);
         const matches = [];
         for (let i = 0; i < currentRound.length; i++) {
           const match = currentRound[i];
@@ -178,8 +177,7 @@
         container.appendChild(roundDiv);
         roundsData.push(matches);
 
-        const nextRound = new Array(matches.length / 2).fill({});
-        currentRound = nextRound;
+        currentRound = new Array(matches.length / 2).fill({});
       }
 
       for (let r = 1; r < roundsData.length; r++) {
@@ -187,33 +185,29 @@
         const thisRound = roundsData[r];
 
         thisRound.forEach((slot, i) => {
-          const winnerInput = slot.p1Name;
-
           const update = () => {
-            const p1 = prevRound[i * 2];
-            const p2 = prevRound[i * 2 + 1];
-            const results = [
-              { name: p1.p1Name.value || p1.p1Name.placeholder, mult: parseFloat(p1.p1Mult.value) },
-              { name: p1.p2Name.value || p1.p2Name.placeholder, mult: parseFloat(p1.p2Mult.value) },
-              { name: p2.p1Name.value || p2.p1Name.placeholder, mult: parseFloat(p2.p1Mult.value) },
-              { name: p2.p2Name.value || p2.p2Name.placeholder, mult: parseFloat(p2.p2Mult.value) },
+            const match1 = prevRound[i * 2];
+            const match2 = prevRound[i * 2 + 1];
+
+            const entries = [
+              { name: match1.p1Name.value || match1.p1Name.placeholder, mult: parseFloat(match1.p1Mult.value) },
+              { name: match1.p2Name.value || match1.p2Name.placeholder, mult: parseFloat(match1.p2Mult.value) },
+              { name: match2.p1Name.value || match2.p1Name.placeholder, mult: parseFloat(match2.p1Mult.value) },
+              { name: match2.p2Name.value || match2.p2Name.placeholder, mult: parseFloat(match2.p2Mult.value) },
             ].filter(e => e.name && !isNaN(e.mult));
 
-            if (results.length >= 2) {
-              results.sort((a, b) => b.mult - a.mult);
-              winnerInput.value = results[0].name;
+            if (entries.length === 2) {
+              const winner = entries[0].mult > entries[1].mult ? entries[0].name : entries[1].name;
+              slot.p1Name.value = winner;
             }
           };
 
-          ['input'].forEach(evt => {
-            const elements = [
-              prevRound[i * 2].p1Name, prevRound[i * 2].p1Mult,
-              prevRound[i * 2].p2Name, prevRound[i * 2].p2Mult,
-              prevRound[i * 2 + 1].p1Name, prevRound[i * 2 + 1].p1Mult,
-              prevRound[i * 2 + 1].p2Name, prevRound[i * 2 + 1].p2Mult,
-            ];
-            elements.forEach(el => el.addEventListener(evt, update));
-          });
+          const elements = [
+            prevRound[i * 2].p1Mult, prevRound[i * 2].p2Mult,
+            prevRound[i * 2 + 1].p1Mult, prevRound[i * 2 + 1].p2Mult
+          ];
+
+          elements.forEach(el => el.addEventListener('input', update));
         });
       }
     }
