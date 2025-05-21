@@ -120,55 +120,79 @@
       container.innerHTML = '';
 
       const rounds = Math.log2(size);
-      let players = [];
-      for (let i = 1; i <= size; i++) {
-        players.push(`Player ${i}`);
+      let matchRefs = [];
+
+      // First round - generate players
+      let currentRound = [];
+      for (let i = 0; i < size; i += 2) {
+        currentRound.push({ p1: `Player ${i+1}`, p2: `Player ${i+2}` });
       }
 
-      let currentRound = players.map((name, i) => {
-        return { name, multiplier: '', match: Math.floor(i / 2) };
-      });
-
-      for (let r = 0; r < rounds; r++) {
+      for (let r = 0; r <= rounds; r++) {
         const roundDiv = document.createElement('div');
         roundDiv.className = 'round';
         const title = document.createElement('div');
         title.className = 'round-title';
-        title.textContent = r === rounds - 1 ? 'Final' : `Round ${r + 1}`;
+        title.textContent = r === rounds ? 'Champion' : (r === rounds - 1 ? 'Final' : `Round ${r + 1}`);
         roundDiv.appendChild(title);
 
-        const matchCount = currentRound.length / 2;
         const nextRound = [];
 
-        for (let m = 0; m < matchCount; m++) {
+        currentRound.forEach((match, index) => {
           const matchDiv = document.createElement('div');
           matchDiv.className = 'match';
 
-          const p1 = currentRound[m * 2];
-          const p2 = currentRound[m * 2 + 1];
+          const p1Name = document.createElement('input');
+          p1Name.value = match.p1 || '';
+          const p1Mult = document.createElement('input');
+          p1Mult.type = 'number';
+          const vs = document.createElement('div');
+          vs.textContent = 'vs';
+          const p2Name = document.createElement('input');
+          p2Name.value = match.p2 || '';
+          const p2Mult = document.createElement('input');
+          p2Mult.type = 'number';
 
-          matchDiv.innerHTML = `
-            <div><input type="text" value="${p1.name}" placeholder="Player"></div>
-            <div><input type="number" placeholder="Multiplier"></div>
-            <div>vs</div>
-            <div><input type="text" value="${p2.name}" placeholder="Player"></div>
-            <div><input type="number" placeholder="Multiplier"></div>
-          `;
-
+          matchDiv.append(p1Name, p1Mult, vs, p2Name, p2Mult);
           roundDiv.appendChild(matchDiv);
 
-          nextRound.push({ name: `Winner of Match ${m + 1}`, multiplier: '', match: Math.floor(m / 2) });
-        }
+          if (r < rounds) {
+            const winner = { name: '', p1: p1Name, p1m: p1Mult, p2: p2Name, p2m: p2Mult };
+            nextRound.push(winner);
+          }
+        });
 
+        matchRefs.push(currentRound);
         container.appendChild(roundDiv);
-        currentRound = nextRound;
-      }
 
-      // Champion round
-      const champ = document.createElement('div');
-      champ.className = 'round';
-      champ.innerHTML = '<div class="round-title">Champion</div><div class="match"><div><input type="text" placeholder="Winner"></div></div>';
-      container.appendChild(champ);
+        currentRound = nextRound.map(w => {
+          const div = document.createElement('div');
+          div.className = 'match';
+          const winnerInput = document.createElement('input');
+          winnerInput.placeholder = 'Winner';
+          div.appendChild(winnerInput);
+
+          // Bind auto-advance
+          const updateWinner = () => {
+            const m1 = parseFloat(w.p1m.value);
+            const m2 = parseFloat(w.p2m.value);
+            const n1 = w.p1.value;
+            const n2 = w.p2.value;
+            if (!isNaN(m1) && !isNaN(m2) && n1 && n2) {
+              winnerInput.value = m1 > m2 ? n1 : n2;
+            }
+          };
+
+          w.p1m.addEventListener('input', updateWinner);
+          w.p2m.addEventListener('input', updateWinner);
+          w.p1.addEventListener('input', updateWinner);
+          w.p2.addEventListener('input', updateWinner);
+
+          w.name = winnerInput;
+          roundDiv.appendChild(div);
+          return { p1: winnerInput, p2: null };
+        });
+      }
     }
   </script>
 </body>
