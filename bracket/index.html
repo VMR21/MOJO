@@ -166,7 +166,6 @@
 
           matchDiv.append(p1Name, p1Mult, vs, p2Name, p2Mult);
 
-          // draw connector to next round
           if (r < rounds) {
             const line = document.createElement('div');
             line.className = 'connector';
@@ -190,29 +189,27 @@
           const match1 = prevRound[i * 2];
           const match2 = prevRound[i * 2 + 1];
 
-          setTimeout(() => {
-            const getWinner = (m) => {
-              const name1 = m.p1Name.value || m.p1Name.placeholder;
-              const name2 = m.p2Name.value || m.p2Name.placeholder;
-              const mult1 = parseFloat(m.p1Mult.value);
-              const mult2 = parseFloat(m.p2Mult.value);
-              if (name1 && name2 && !isNaN(mult1) && !isNaN(mult2)) {
-                return mult1 > mult2 ? name1 : name2;
-              }
-              return '';
-            };
+          const getWinner = (m) => {
+            const name1 = m.p1Name.value || m.p1Name.placeholder;
+            const name2 = m.p2Name.value || m.p2Name.placeholder;
+            const mult1 = parseFloat(m.p1Mult.value);
+            const mult2 = parseFloat(m.p2Mult.value);
+            if (name1 && name2 && !isNaN(mult1) && !isNaN(mult2)) {
+              return mult1 > mult2 ? name1 : name2;
+            }
+            return '';
+          };
 
-            const update = () => {
-              const winner1 = getWinner(match1);
-              const winner2 = getWinner(match2);
-              if (slot.p1Name && winner1) slot.p1Name.value = winner1;
-              if (slot.p2Name && winner2) slot.p2Name.value = winner2;
-            };
+          const update = () => {
+            const winner1 = getWinner(match1);
+            const winner2 = getWinner(match2);
+            slot.p1Name.value = winner1;
+            slot.p2Name.value = winner2;
+          };
 
-            [match1.p1Mult, match1.p2Mult, match2.p1Mult, match2.p2Mult].forEach(el =>
-              el.addEventListener('input', update)
-            );
-          }, 100);
+          [match1.p1Mult, match1.p2Mult, match2.p1Mult, match2.p2Mult].forEach(el => {
+            el.addEventListener('input', update);
+          });
         });
       }
     }
