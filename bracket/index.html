@@ -75,6 +75,18 @@
       text-align: center;
       font-size: 0.875rem;
     }
+    .bracket-selector {
+      text-align: center;
+      margin: 20px 0;
+    }
+    .bracket-selector select, .bracket-selector button {
+      padding: 10px;
+      margin: 5px;
+      background: #1a1a1a;
+      color: white;
+      border: 1px solid #333;
+      border-radius: 4px;
+    }
   </style>
 </head>
 <body>
@@ -84,47 +96,80 @@
   </header>
 
   <div class="container">
-    <h2 style="text-align:center">Knockout Bracket (4 Players)</h2>
-    <div class="bracket">
-      <div class="round">
-        <div class="round-title">Round 1</div>
-        <div class="match">
-          <div><input type="text" placeholder="Player 1"></div>
-          <div><input type="text" placeholder="Multiplier"></div>
-          <div>vs</div>
-          <div><input type="text" placeholder="Player 2"></div>
-          <div><input type="text" placeholder="Multiplier"></div>
-        </div>
-        <div class="match">
-          <div><input type="text" placeholder="Player 3"></div>
-          <div><input type="text" placeholder="Multiplier"></div>
-          <div>vs</div>
-          <div><input type="text" placeholder="Player 4"></div>
-          <div><input type="text" placeholder="Multiplier"></div>
-        </div>
-      </div>
-      <div class="round">
-        <div class="round-title">Final</div>
-        <div class="match">
-          <div><input type="text" placeholder="Winner 1"></div>
-          <div><input type="text" placeholder="Multiplier"></div>
-          <div>vs</div>
-          <div><input type="text" placeholder="Winner 2"></div>
-          <div><input type="text" placeholder="Multiplier"></div>
-        </div>
-      </div>
-      <div class="round">
-        <div class="round-title">Champion</div>
-        <div class="match">
-          <div><input type="text" placeholder="Winner"></div>
-        </div>
-      </div>
+    <div class="bracket-selector">
+      <label for="bracketSize">Select Bracket Size: </label>
+      <select id="bracketSize">
+        <option value="4">4 Players</option>
+        <option value="8">8 Players</option>
+        <option value="16">16 Players</option>
+      </select>
+      <button onclick="generateBracket()">Generate Bracket</button>
     </div>
+    <div id="bracketContainer" class="bracket"></div>
   </div>
 
   <div class="footer">
     © 2025 MOJOTX — All Rights Reserved<br>
     Follow us on Kick, X, Instagram, YouTube, and Discord
   </div>
+
+  <script>
+    function generateBracket() {
+      const size = parseInt(document.getElementById('bracketSize').value);
+      const container = document.getElementById('bracketContainer');
+      container.innerHTML = '';
+
+      const rounds = Math.log2(size);
+      let players = [];
+      for (let i = 1; i <= size; i++) {
+        players.push(`Player ${i}`);
+      }
+
+      let currentRound = players.map((name, i) => {
+        return { name, multiplier: '', match: Math.floor(i / 2) };
+      });
+
+      for (let r = 0; r < rounds; r++) {
+        const roundDiv = document.createElement('div');
+        roundDiv.className = 'round';
+        const title = document.createElement('div');
+        title.className = 'round-title';
+        title.textContent = r === rounds - 1 ? 'Final' : `Round ${r + 1}`;
+        roundDiv.appendChild(title);
+
+        const matchCount = currentRound.length / 2;
+        const nextRound = [];
+
+        for (let m = 0; m < matchCount; m++) {
+          const matchDiv = document.createElement('div');
+          matchDiv.className = 'match';
+
+          const p1 = currentRound[m * 2];
+          const p2 = currentRound[m * 2 + 1];
+
+          matchDiv.innerHTML = `
+            <div><input type="text" value="${p1.name}" placeholder="Player"></div>
+            <div><input type="number" placeholder="Multiplier"></div>
+            <div>vs</div>
+            <div><input type="text" value="${p2.name}" placeholder="Player"></div>
+            <div><input type="number" placeholder="Multiplier"></div>
+          `;
+
+          roundDiv.appendChild(matchDiv);
+
+          nextRound.push({ name: `Winner of Match ${m + 1}`, multiplier: '', match: Math.floor(m / 2) });
+        }
+
+        container.appendChild(roundDiv);
+        currentRound = nextRound;
+      }
+
+      // Champion round
+      const champ = document.createElement('div');
+      champ.className = 'round';
+      champ.innerHTML = '<div class="round-title">Champion</div><div class="match"><div><input type="text" placeholder="Winner"></div></div>';
+      container.appendChild(champ);
+    }
+  </script>
 </body>
 </html>
