@@ -13,7 +13,7 @@ html, body {
 }
 
 body {
-  background-image: url("bg.png"); /* make sure this path is correct */
+  background-image: url("/assets/image.png"); /* make sure this path is correct */
   background-size: cover;       /* Fill the screen */
   background-repeat: no-repeat; /* Don't repeat */
   background-position: center;  /* Center the image */
