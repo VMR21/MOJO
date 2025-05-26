@@ -1,17 +1,17 @@
 @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Roboto:wght@300;400;700&display=swap'); /* cite: 1 */
 
 :root {
-    --bg-color: #0d0a20; /* cite: 1 */
-    --primary-color: #7a3bff; /* Purple */ /* cite: 1 */
-    --secondary-color: #00e0ff; /* Cyan */ /* cite: 1 */
-    --text-color: #e0e0e0; /* cite: 1 */
-    --input-bg: rgba(255, 255, 255, 0.08); /* cite: 1 */
-    --input-border: rgba(255, 255, 255, 0.2); /* cite: 1 */
-    --input-focus-border: var(--secondary-color); /* cite: 1 */
-    --glow-color: var(--secondary-color); /* cite: 1 */
-    --highlight-color: #ffee00; /* Yellow for winner */ /* cite: 1 */
-    --line-color: rgba(0, 224, 255, 0.5); /* Semi-transparent cyan */ /* cite: 1 */
-    --line-glow: #00e0ff; /* Bright cyan for line glow */ /* cite: 1 */
+    --bg-color: #0b0c20; /* Darker, more blue-black background */
+    --primary-color: #007bff; /* A vibrant blue */
+    --secondary-color: #00e0ff; /* Bright cyan, kept for contrast */
+    --text-color: #e0e0e0; /* Light grey for general text */
+    --input-bg: rgba(0, 50, 100, 0.2); /* Semi-transparent dark blue for inputs */
+    --input-border: rgba(0, 150, 255, 0.4); /* Lighter blue border for inputs */
+    --input-focus-border: var(--secondary-color); /* Kept cyan for focus highlight */
+    --glow-color: var(--secondary-color); /* Cyan glow for interactive elements */
+    --highlight-color: #aaffff; /* Lighter, almost white blue for winner */
+    --line-color: rgba(0, 100, 200, 0.6); /* Deeper blue for lines */
+    --line-glow: #00e0ff; /* Bright cyan for line glow */
 }
 
 * {
@@ -22,7 +22,7 @@
 }
 
 body {
-    background: linear-gradient(135deg, #0d0a20, #2a0b3b); /* cite: 1 */
+    background: linear-gradient(135deg, #0b0c20, #1a2a40); /* Blueish gradient background */
     color: var(--text-color); /* cite: 1 */
     overflow: hidden; /* cite: 1 */
     display: flex; /* cite: 1 */
@@ -40,8 +40,8 @@ body {
     left: 0; /* cite: 1 */
     width: 100%; /* cite: 1 */
     height: 100%; /* cite: 1 */
-    background: radial-gradient(circle at top left, rgba(122, 59, 255, 0.15) 0%, transparent 40%),
-                radial-gradient(circle at bottom right, rgba(0, 224, 255, 0.15) 0%, transparent 40%); /* cite: 1 */
+    background: radial-gradient(circle at top left, rgba(0, 100, 255, 0.15) 0%, transparent 40%),
+                radial-gradient(circle at bottom right, rgba(0, 224, 255, 0.15) 0%, transparent 40%); /* Adjusted colors */
     opacity: 0.7; /* cite: 1 */
     animation: backgroundPulse 15s infinite alternate; /* cite: 1 */
     z-index: -1; /* cite: 1 */
@@ -54,16 +54,16 @@ body {
 }
 
 .container {
-    background: rgba(13, 10, 32, 0.7); /* cite: 1 */
+    background: rgba(0, 15, 30, 0.8); /* Darker blueish transparent background */
     border-radius: 20px; /* cite: 1 */
     padding: 40px; /* cite: 1 */
     box-shadow: 0 15px 30px rgba(0, 0, 0, 0.5); /* cite: 1 */
     display: flex; /* cite: 1 */
-    gap: 40px; /* Added gap back for sidebar */ /* cite: 1 */
+    gap: 40px; /* cite: 1 */
     position: relative; /* cite: 1 */
     max-width: 1600px; /* cite: 1 */
     width: 100%; /* cite: 1 */
-    border: 1px solid rgba(255, 255, 255, 0.1); /* cite: 1 */
+    border: 1px solid rgba(0, 100, 255, 0.3); /* Blueish border */
     transform: translateY(20px); /* cite: 1 */
     opacity: 0; /* cite: 1 */
     animation: fadeInUp 1s forwards cubic-bezier(0.2, 0.8, 0.2, 1); /* cite: 1 */
@@ -78,14 +78,14 @@ body {
     font-size: 3.5em; /* cite: 1 */
     font-weight: 700; /* cite: 1 */
     color: var(--primary-color); /* cite: 1 */
-    text-shadow: 0 0 15px var(--primary-color), 0 0 30px rgba(122, 59, 255, 0.5); /* cite: 1 */
+    text-shadow: 0 0 15px var(--primary-color), 0 0 30px rgba(0, 123, 255, 0.5); /* Blue shadow */
     margin-bottom: 30px; /* cite: 1 */
     position: absolute; /* cite: 1 */
     top: -60px; /* cite: 1 */
     left: 40px; /* cite: 1 */
     letter-spacing: 2px; /* cite: 1 */
     animation: textGlow 3s infinite alternate; /* cite: 1 */
-    z-index: 20; /* Ensure title is above everything */ /* cite: 1 */
+    z-index: 20; /* cite: 1 */
 }
 
 .tournament-text {
@@ -98,24 +98,23 @@ body {
 }
 
 @keyframes textGlow {
-    0% { text-shadow: 0 0 15px var(--primary-color), 0 0 30px rgba(122, 59, 255, 0.5); } /* cite: 1 */
-    100% { text-shadow: 0 0 25px var(--primary-color), 0 0 40px rgba(122, 59, 255, 0.8); } /* cite: 1 */
+    0% { text-shadow: 0 0 15px var(--primary-color), 0 0 30px rgba(0, 123, 255, 0.5); } /* Blue shadow */
+    100% { text-shadow: 0 0 25px var(--primary-color), 0 0 40px rgba(0, 123, 255, 0.8); } /* Blue shadow */
 }
 
 .bracket-main-area {
     flex-grow: 1; /* cite: 1 */
     position: relative; /* cite: 1 */
-    padding-top: 80px; /* Space for title */ /* cite: 1 */
-    height: 600px; /* Fixed height to match SVG viewBox height */ /* cite: 1 */
+    padding-top: 80px; /* cite: 1 */
+    height: 600px; /* cite: 1 */
 }
 
 .bracket-grid {
     display: grid; /* cite: 1 */
-    /* Using fractional units and max-width for better responsiveness */
     grid-template-columns: repeat(4, 1fr); /* cite: 1 */
-    gap: 20px 5%; /* Vertical gap, Horizontal gap (between columns) */ /* cite: 1 */
-    width: 100%; /* Take full width of bracket-main-area */ /* cite: 1 */
-    max-width: 900px; /* Limit overall bracket width for better appearance */ /* cite: 1 */
+    gap: 20px 5%; /* cite: 1 */
+    width: 100%; /* cite: 1 */
+    max-width: 900px; /* cite: 1 */
     height: 100%; /* cite: 1 */
     position: relative; /* cite: 1 */
     z-index: 10; /* cite: 1 */
@@ -126,18 +125,11 @@ body {
 .round {
     display: flex; /* cite: 1 */
     flex-direction: column; /* cite: 1 */
-    justify-content: space-around; /* Distribute matches evenly */ /* cite: 1 */
-    gap: 30px; /* Space between matches in a round */ /* cite: 1 */
-    height: 100%; /* Make rounds fill vertical space */ /* cite: 1 */
+    justify-content: space-around; /* cite: 1 */
+    gap: 30px; /* cite: 1 */
+    height: 100%; /* cite: 1 */
     position: relative; /* cite: 1 */
 }
-
-/* IMPORTANT: Removed specific margin-top/bottom for each match.
-   The `justify-content: space-around` on `.round` and the `height: 100%`
-   on `.round` will handle vertical distribution automatically.
-   The SVG lines will likely need manual adjustment in `index.html`
-   if exact alignment is crucial, as their paths are hardcoded. */
-
 
 .match {
     background: var(--input-bg); /* cite: 1 */
@@ -147,13 +139,13 @@ body {
     display: flex; /* cite: 1 */
     flex-direction: column; /* cite: 1 */
     align-items: center; /* cite: 1 */
-    gap: 5px; /* Reduced gap inside match */ /* cite: 1 */
+    gap: 5px; /* cite: 1 */
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3); /* cite: 1 */
     transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease; /* cite: 1 */
-    width: 200px; /* Fixed width for all boxes */ /* cite: 1 */
-    height: 100px; /* Fixed height for all boxes */ /* cite: 1 */
-    justify-content: center; /* Center content vertically */ /* cite: 1 */
-    position: relative; /* For winner button positioning */ /* cite: 1 */
+    width: 200px; /* cite: 1 */
+    height: 100px; /* cite: 1 */
+    justify-content: center; /* cite: 1 */
+    position: relative; /* cite: 1 */
 }
 
 .match:hover {
@@ -172,20 +164,20 @@ body {
 
 .player-input {
     flex-grow: 1; /* cite: 1 */
-    padding: 5px 8px; /* Adjusted padding */ /* cite: 1 */
+    padding: 5px 8px; /* cite: 1 */
     background: transparent; /* cite: 1 */
     border: 1px solid var(--input-border); /* cite: 1 */
     border-radius: 6px; /* cite: 1 */
     color: var(--text-color); /* cite: 1 */
-    font-size: 0.9em; /* Slightly smaller font */ /* cite: 1 */
+    font-size: 0.9em; /* cite: 1 */
     outline: none; /* cite: 1 */
     transition: border-color 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease; /* cite: 1 */
     text-align: center; /* cite: 1 */
-    min-width: 0; /* Allow shrinking */ /* cite: 1 */
+    min-width: 0; /* cite: 1 */
 }
 
 .multiplier-input {
-    width: 40px; /* Fixed width for multiplier */ /* cite: 1 */
+    width: 40px; /* cite: 1 */
     padding: 5px 3px; /* cite: 1 */
     background: transparent; /* cite: 1 */
     border: 1px solid var(--input-border); /* cite: 1 */
@@ -194,16 +186,15 @@ body {
     font-size: 0.9em; /* cite: 1 */
     outline: none; /* cite: 1 */
     text-align: center; /* cite: 1 */
-    -moz-appearance: textfield; /* Hide arrows in Firefox */ /* cite: 1 */
+    -moz-appearance: textfield; /* cite: 1 */
     transition: border-color 0.3s ease, box-shadow 0.3s ease; /* cite: 1 */
 }
 
 .multiplier-input::-webkit-outer-spin-button,
 .multiplier-input::-webkit-inner-spin-button {
     -webkit-appearance: none; /* cite: 1 */
-    margin: 0; /* Hide arrows in Chrome, Safari, Edge */ /* cite: 1 */
+    margin: 0; /* cite: 1 */
 }
-
 
 .player-input::placeholder, .multiplier-input::placeholder {
     color: rgba(255, 255, 255, 0.4); /* cite: 1 */
@@ -216,13 +207,13 @@ body {
 
 /* Winner input specific style */
 .player-input.winner {
-    background: rgba(255, 255, 0, 0.1); /* Slightly yellow tint for winner */ /* cite: 1 */
+    background: rgba(0, 200, 255, 0.1); /* Blue tint for winner */
     color: var(--highlight-color); /* cite: 1 */
     border-color: var(--highlight-color); /* cite: 1 */
-    text-shadow: 0 0 5px rgba(255, 255, 0, 0.7); /* cite: 1 */
+    text-shadow: 0 0 5px rgba(0, 200, 255, 0.7); /* Blue shadow */
 }
 .multiplier-input.winner {
-    background: rgba(255, 255, 0, 0.1); /* cite: 1 */
+    background: rgba(0, 200, 255, 0.1); /* Blue tint for winner */
     color: var(--highlight-color); /* cite: 1 */
     border-color: var(--highlight-color); /* cite: 1 */
 }
@@ -232,20 +223,20 @@ body {
     font-weight: bold; /* cite: 1 */
     font-size: 1.2em; /* cite: 1 */
     color: var(--highlight-color); /* cite: 1 */
-    text-shadow: 0 0 10px var(--highlight-color), 0 0 20px rgba(255, 255, 0, 0.5); /* cite: 1 */
+    text-shadow: 0 0 10px var(--highlight-color), 0 0 20px rgba(0, 255, 255, 0.5); /* Blueish highlight */
     border-color: var(--highlight-color) !important; /* cite: 1 */
-    background: rgba(255, 255, 0, 0.15) !important; /* cite: 1 */
+    background: rgba(0, 200, 255, 0.15) !important; /* Blueish background */
 }
 
 .final-winner-entry {
-    flex-direction: column; /* Ensure winner name is centered */ /* cite: 1 */
+    flex-direction: column; /* cite: 1 */
     gap: 0; /* cite: 1 */
 }
 
 .vs-text {
     font-size: 0.8em; /* cite: 1 */
     color: rgba(255, 255, 255, 0.5); /* cite: 1 */
-    display: block; /* Always visible, just for styling */ /* cite: 1 */
+    display: block; /* cite: 1 */
     margin: 2px 0; /* cite: 1 */
 }
 
@@ -263,12 +254,12 @@ body {
     font-weight: 700; /* cite: 1 */
     letter-spacing: 0.5px; /* cite: 1 */
     position: absolute; /* cite: 1 */
-    bottom: -20px; /* Position below the box */ /* cite: 1 */
+    bottom: -20px; /* cite: 1 */
     left: 50%; /* cite: 1 */
     transform: translateX(-50%); /* cite: 1 */
-    opacity: 0; /* Hidden by default */ /* cite: 1 */
-    pointer-events: none; /* Disable interaction when hidden */ /* cite: 1 */
-    z-index: 15; /* Ensure button is clickable */ /* cite: 1 */
+    opacity: 0; /* cite: 1 */
+    pointer-events: none; /* cite: 1 */
+    z-index: 15; /* cite: 1 */
 }
 
 .decide-winner-btn.active {
@@ -289,7 +280,7 @@ body {
 }
 
 .decide-winner-btn.match-completed {
-    background: #444; /* Greyed out when completed */ /* cite: 1 */
+    background: #444; /* cite: 1 */
     cursor: not-allowed; /* cite: 1 */
     pointer-events: none; /* cite: 1 */
     opacity: 0.6; /* cite: 1 */
@@ -308,7 +299,7 @@ body {
     left: 0; /* cite: 1 */
     width: 100%; /* cite: 1 */
     height: 100%; /* cite: 1 */
-    z-index: 1; /* Below matches */ /* cite: 1 */
+    z-index: 1; /* cite: 1 */
 }
 
 .bracket-line {
@@ -318,7 +309,7 @@ body {
     stroke-linecap: round; /* cite: 1 */
     stroke-linejoin: round; /* cite: 1 */
     transition: stroke 0.5s ease, stroke-width 0.5s ease, filter 0.5s ease; /* cite: 1 */
-    filter: drop-shadow(0 0 5px rgba(0, 224, 255, 0.2)); /* cite: 1 */
+    filter: drop-shadow(0 0 5px rgba(0, 100, 255, 0.2)); /* Blueish glow */
 }
 
 .bracket-line.active {
@@ -337,7 +328,7 @@ body {
 .sidebar {
     width: 280px; /* cite: 1 */
     flex-shrink: 0; /* cite: 1 */
-    background: rgba(13, 10, 32, 0.8); /* cite: 1 */
+    background: rgba(0, 15, 30, 0.9); /* Darker blueish transparent background */
     border-radius: 15px; /* cite: 1 */
     padding: 30px; /* cite: 1 */
     display: flex; /* cite: 1 */
@@ -345,7 +336,7 @@ body {
     align-items: center; /* cite: 1 */
     justify-content: flex-start; /* cite: 1 */
     gap: 30px; /* cite: 1 */
-    border: 1px solid rgba(255, 255, 255, 0.1); /* cite: 1 */
+    border: 1px solid rgba(0, 100, 255, 0.3); /* Blueish border */
     box-shadow: 0 10px 20px rgba(0, 0, 0, 0.4); /* cite: 1 */
     transform: translateX(20px); /* cite: 1 */
     opacity: 0; /* cite: 1 */
@@ -416,15 +407,14 @@ body {
 
 /* New Sidebar Content */
 .sidebar .logo-section img {
-    /* Replace with your image URL */
     content:url('https://files.kick.com/images/user/99806/profile_image/conversion/1ab9ad81-7b12-4589-934c-bee6b3f0a9a9-fullsize.webp'); /* cite: 1 */
-    width: 150px; /* Adjust as needed */ /* cite: 1 */
+    width: 150px; /* cite: 1 */
     height: auto; /* cite: 1 */
     margin-bottom: 20px; /* cite: 1 */
 }
 
 .sidebar .code-section {
-    background: linear-gradient(45deg, #ff6b6b, #c737ff); /* Example gradient */ /* cite: 1 */
+    background: linear-gradient(45deg, #007bff, #00e0ff); /* Blueish gradient */
     padding: 20px; /* cite: 1 */
     border-radius: 10px; /* cite: 1 */
     text-align: center; /* cite: 1 */
@@ -452,14 +442,14 @@ body {
         gap: 30px; /* cite: 1 */
     }
     .bracket-main-area {
-        height: auto; /* Allow height to adjust */ /* cite: 1 */
+        height: auto; /* cite: 1 */
     }
     .bracket-grid {
         grid-template-columns: 1fr; /* cite: 1 */
         gap: 40px 0; /* cite: 1 */
         height: auto; /* cite: 1 */
         justify-content: center; /* cite: 1 */
-        align-items: flex-start; /* Align matches to the top */ /* cite: 1 */
+        align-items: flex-start; /* cite: 1 */
     }
     /* Reset specific match positioning for mobile */
     .round-1 .match, .round-2 .match, .round-3 .match, .winner-round .match {
@@ -469,13 +459,13 @@ body {
     }
     .match {
         max-width: 280px; /* cite: 1 */
-        height: auto; /* Auto height for content */ /* cite: 1 */
+        height: auto; /* cite: 1 */
         min-height: 100px; /* cite: 1 */
-        flex-direction: column; /* Stack inputs vertically */ /* cite: 1 */
+        flex-direction: column; /* cite: 1 */
         justify-content: center; /* cite: 1 */
     }
     .player-entry {
-        flex-direction: row; /* Keep player name and multiplier side-by-side */ /* cite: 1 */
+        flex-direction: row; /* cite: 1 */
         gap: 5px; /* cite: 1 */
     }
     .player-input {
@@ -483,7 +473,7 @@ body {
         flex-basis: auto; /* cite: 1 */
     }
     .multiplier-input {
-        flex-shrink: 0; /* Don't shrink multiplier input */ /* cite: 1 */
+        flex-shrink: 0; /* cite: 1 */
     }
     .decide-winner-btn {
         position: static; /* cite: 1 */
@@ -501,7 +491,7 @@ body {
         margin-bottom: 20px; /* cite: 1 */
         font-size: 3em; /* cite: 1 */
     }
-    .bracket-lines { /* Hide SVG lines on smaller screens as layout changes */
+    .bracket-lines { /* cite: 1 */
         display: none; /* cite: 1 */
     }
 }
