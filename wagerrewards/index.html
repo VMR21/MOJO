@@ -261,13 +261,12 @@
             color: #00eaff;
             font-weight: bold;
         }
-        /* Fix unwanted blur/dim on glow text */
-.glow {
-    color: #fff;
-    text-shadow: 0 0 8px #00eaff, 0 0 12px #00eaff, 0 0 20px #00eaff;
-    transition: none;
-    filter: none;
-    opacity: 1;
+        .no-glow {
+    all: unset;
+    color: inherit !important;
+    text-shadow: none !important;
+    filter: none !important;
+    opacity: 1 !important;
 }
 
     </style>
@@ -320,7 +319,7 @@
                 <span data-v-1d580398="" class="title">
                     <div data-v-1d580398="" class="price-wrapper glow">
                         Wager Rewards
-                    </div> with <span class="glow">MOJOTX</span>!
+                    </div> with <span class="glow no-glow">MOJOTX</span>!
                 </span>
                 <span data-v-1d580398="" class="subtitle" style="color: #FFF;">Every <b>BET</b> on Rainbet under Code
                     <b>MOJOTX</b>
