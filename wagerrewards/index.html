@@ -91,16 +91,15 @@
         }
 
         .close {
-            color: #aaa;
+            color: #fff; /* Always white */
             font-size: 28px;
             font-weight: bold;
             cursor: pointer;
-            transition: color 0.2s ease;
+            /* No transition needed if it's always white and doesn't change on hover */
+            /* transition: color 0.2s ease; */
         }
 
-        .close:hover {
-            color: #fff;
-        }
+        /* Removed .close:hover rule as color is now default */
 
         .modal-body {
             color: #d1d5db;
@@ -128,41 +127,15 @@
             text-decoration: none;
             font-weight: 600;
             transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-            border: 2px solid rgba(255, 255, 255, 0.2);
-            box-shadow: 0 4px 15px rgba(39, 117, 202, 0.2);
+            /* These styles are moved from :hover to be always on */
+            transform: translateY(-2px) scale(1.02);
+            border: 2px solid rgba(255, 255, 255, 0.4);
+            box-shadow: 0 6px 20px rgba(39, 117, 202, 0.4);
             position: relative;
             overflow: hidden;
         }
 
-.prev-lb-btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    background: rgb(39, 117, 202);
-    color: #000;
-    padding: 12px 24px;
-    border-radius: 8px;
-    text-decoration: none;
-    font-weight: 600;
-    /* Add these styles to make it always "on" */
-    transform: translateY(-2px) scale(1.02); /* Always lifted and slightly scaled */
-    border: 2px solid rgba(255, 255, 255, 0.4); /* Always have the stronger border */
-    box-shadow: 0 6px 20px rgba(39, 117, 202, 0.4); /* Always have the stronger shadow */
-    position: relative;
-    overflow: hidden;
-    /* Keep transition if you want a smooth initial load or other non-hover transitions */
-    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.prev-lb-btn svg {
-    width: 18px;
-    height: 18px;
-    /* Add these styles to make it always "on" */
-    transform: scale(1.1); /* Always scaled */
-    stroke: black; /* Always black */
-    /* Keep transition for smooth initial load */
-    transition: transform 0.2s ease;
-}
+        /* Removed .prev-lb-btn:hover rule as styles are now default */
 
         .prev-lb-btn:active {
             transform: translateY(0) scale(0.98);
@@ -172,7 +145,13 @@
             width: 18px;
             height: 18px;
             transition: transform 0.2s ease;
+            /* These styles are moved from :hover to be always on */
+            transform: scale(1.1);
+            stroke: black;
         }
+
+        /* Removed .prev-lb-btn:hover svg rule as styles are now default */
+
 
         @keyframes float {
             0% {
@@ -233,49 +212,81 @@
             }
         }
 
-        .wager-table {
-            width: 100%;
-            max-width: 600px;
-            margin: 30px auto;
-            border-collapse: collapse;
-            background: rgba(0, 0, 0, 0.3);
-            border-radius: 8px;
-            overflow: hidden;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
-        }
-
-        .wager-table th,
-        .wager-table td {
-            padding: 15px;
+        /* Wager Rewards Table Styles */
+        .wager-rewards-container {
+            background: linear-gradient(135deg, #1f2937, #111827);
+            border-radius: 12px;
+            padding: 30px;
+            max-width: 700px;
+            margin: 40px auto;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
             text-align: center;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .wager-rewards-container h2 {
+            font-size: 36px;
+            color: #00eaff;
+            margin-bottom: 30px;
+            text-shadow: 0 0 15px #00eaff;
+        }
+
+        .wager-rewards-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        .wager-rewards-table th,
+        .wager-rewards-table td {
+            padding: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: #d1d5db;
+            font-size: 18px;
+        }
+
+        .wager-rewards-table th {
+            background-color: rgba(39, 117, 202, 0.3);
             color: #fff;
-            font-size: 1.1em;
-        }
-
-        .wager-table th {
-            background-color: rgba(39, 117, 202, 0.7);
             font-weight: bold;
-            text-transform: uppercase;
-            letter-spacing: 1px;
+            font-size: 20px;
         }
 
-        .wager-table tr:last-child td {
-            border-bottom: none;
-        }
-
-        .wager-table tr:nth-child(even) {
+        .wager-rewards-table tr:nth-child(even) {
             background-color: rgba(0, 0, 0, 0.1);
         }
 
-        .wager-table td:first-child {
+        .wager-rewards-table td:first-child {
             font-weight: bold;
-            color: #ff8e3c;
+            color: #fff;
         }
 
-        .wager-table td:last-child {
-            color: #00eaff;
+        /* Socials */
+        .footer-socials {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            margin-top: 10px;
+        }
+
+        .footer-socials a.social {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+            color: white;
             font-weight: bold;
+            font-size: 14px;
+            transition: transform 0.2s;
+            /* This style is moved from :hover to be always on */
+            transform: translateX(4px);
+        }
+
+        /* Removed .footer-socials a.social:hover rule as style is now default */
+
+        .footer-socials .social-img {
+            width: 22px;
+            height: 22px;
+            object-fit: contain;
         }
     </style>
 </head>
@@ -287,17 +298,13 @@
     <div id="rulesModal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
-                <h2 class="modal-title">Wager Rewards Rules</h2>
+                <h2 class="modal-title">Wager Rewards Information</h2>
                 <span class="close">×</span>
             </div>
             <div class="modal-body">
-                <p>These are the rewards for specific wagered amounts. Ensure you are on code MOJOTX to qualify!</p>
-                <ul>
-                    <li>Rewards are based on total wagered amount.</li>
-                    <li>Rewards are cumulative across the month.</li>
-                    <li>Must be on code MOJOTX to be eligible.</li>
-                    <li>Rewards will be paid out at the end of each month.</li>
-                </ul>
+                <p>These rewards are based on your total wagered amount using the code **MOJOTX** on Rainbet.</p>
+                <p><strong>Important:</strong> Must be on code MOJOTX.</p>
+                <p>The rewards are cumulative and based on the tiers shown. Wagered amounts are updated regularly.</p>
             </div>
         </div>
     </div>
@@ -331,13 +338,13 @@
             <div data-v-1d580398="" class="row text">
                 <span data-v-1d580398="" class="title">
                     <div data-v-1d580398="" class="price-wrapper glow">
-                        Wager Rewards
-                    </div> with <span class="glow">MOJOTX</span>!
+                        Exclusive Wager Rewards
+                    </div> with Code <span class="glow">MOJOTX</span>!
                 </span>
-                <span data-v-1d580398="" class="subtitle" style="color: #FFF;">Every <b>BET</b> on Rainbet under Code
-                    <b>MOJOTX</b>
+                <span data-v-1d580398="" class="subtitle" style="color: #FFF;">Every **BET** on Rainbet under Code
+                    **MOJOTX**
                     counts towards your rewards. <br>
-                    <i>Rewards are paid out monthly.</i><br>
+                    <i>Your wagered total updates frequently.</i><br>
                     <div class="warning-message">
                         Every Bet Counts!
                     </div>
@@ -351,48 +358,53 @@
                             <line x1="16" y1="17" x2="8" y2="17"></line>
                             <polyline points="10 9 9 9 8 9"></polyline>
                         </svg>
-                        RULES
+                        REWARDS INFO
                     </button>
                 </span>
+
+                <div class="wager-rewards-container">
+                    <h2>Wager Reward Tiers</h2>
+                    <table class="wager-rewards-table">
+                        <thead>
+                            <tr>
+                                <th>Wagered Amount</th>
+                                <th>Reward</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>$5,000</td>
+                                <td>$10</td>
+                            </tr>
+                            <tr>
+                                <td>$10,000</td>
+                                <td>$20</td>
+                            </tr>
+                            <tr>
+                                <td>$50,000</td>
+                                <td>$75</td>
+                            </tr>
+                            <tr>
+                                <td>$100,000</td>
+                                <td>$150</td>
+                            </tr>
+                            <tr>
+                                <td>$250,000</td>
+                                <td>$500</td>
+                            </tr>
+                            <tr>
+                                <td>$500,000</td>
+                                <td>$1,000</td>
+                            </tr>
+                            <tr>
+                                <td>$1,000,000</td>
+                                <td>$2,000</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
             </div>
-            <table class="wager-table">
-                <thead>
-                    <tr>
-                        <th>Wagered Amount</th>
-                        <th>Reward</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>$5,000</td>
-                        <td>$10</td>
-                    </tr>
-                    <tr>
-                        <td>$10,000</td>
-                        <td>$20</td>
-                    </tr>
-                    <tr>
-                        <td>$50,000</td>
-                        <td>$75</td>
-                    </tr>
-                    <tr>
-                        <td>$100,000</td>
-                        <td>$150</td>
-                    </tr>
-                    <tr>
-                        <td>$250,000</td>
-                        <td>$500</td>
-                    </tr>
-                    <tr>
-                        <td>$500,000</td>
-                        <td>$1,000</td>
-                    </tr>
-                    <tr>
-                        <td>$1,000,000</td>
-                        <td>$2,000</td>
-                    </tr>
-                </tbody>
-            </table>
         </div>
     </div>
     <div data-v-5867ad71="" class="row inner-footer">
@@ -410,35 +422,6 @@
             <a data-v-5867ad71="" href="/" class=""><span data-v-5867ad71="" class="subtitle">Privacy
                     Policy</span></a>
         </div>
-        <style>
-            .footer-socials {
-                display: flex;
-                flex-direction: column;
-                gap: 14px;
-                margin-top: 10px;
-            }
-
-            .footer-socials a.social {
-                display: flex;
-                align-items: center;
-                gap: 10px;
-                text-decoration: none;
-                color: white;
-                font-weight: bold;
-                font-size: 14px;
-                transition: transform 0.2s;
-            }
-
-            .footer-socials a.social:hover {
-                transform: translateX(4px);
-            }
-
-            .footer-socials .social-img {
-                width: 22px;
-                height: 22px;
-                object-fit: contain;
-            }
-        </style>
 
         <div class="col">
             <span class="title">Socials</span>
@@ -512,5 +495,3 @@
 <script src="/js/app.js"></script>
 <script src="/js/particles.js"></script>
 <script src="/js/toast.js"></script>
-
-</html>
