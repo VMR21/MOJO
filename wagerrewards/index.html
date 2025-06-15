@@ -134,19 +134,35 @@
             overflow: hidden;
         }
 
-        .prev-lb-btn:hover {
-            transform: translateY(-2px) scale(1.02);
-            background: rgb(39, 117, 202);
-            box-shadow: 0 6px 20px rgba(39, 117, 202, 0.4);
-            border-color: rgba(255, 255, 255, 0.4);
-            text-decoration: none;
-            color: black;
-        }
+.prev-lb-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgb(39, 117, 202);
+    color: #000;
+    padding: 12px 24px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 600;
+    /* Add these styles to make it always "on" */
+    transform: translateY(-2px) scale(1.02); /* Always lifted and slightly scaled */
+    border: 2px solid rgba(255, 255, 255, 0.4); /* Always have the stronger border */
+    box-shadow: 0 6px 20px rgba(39, 117, 202, 0.4); /* Always have the stronger shadow */
+    position: relative;
+    overflow: hidden;
+    /* Keep transition if you want a smooth initial load or other non-hover transitions */
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
 
-        .prev-lb-btn:hover svg {
-            transform: scale(1.1);
-            stroke: black;
-        }
+.prev-lb-btn svg {
+    width: 18px;
+    height: 18px;
+    /* Add these styles to make it always "on" */
+    transform: scale(1.1); /* Always scaled */
+    stroke: black; /* Always black */
+    /* Keep transition for smooth initial load */
+    transition: transform 0.2s ease;
+}
 
         .prev-lb-btn:active {
             transform: translateY(0) scale(0.98);
