@@ -91,15 +91,16 @@
         }
 
         .close {
-            color: #fff; /* Always white */
+            color: #aaa;
             font-size: 28px;
             font-weight: bold;
             cursor: pointer;
-            /* No transition needed if it's always white and doesn't change on hover */
-            /* transition: color 0.2s ease; */
+            transition: color 0.2s ease;
         }
 
-        /* Removed .close:hover rule as color is now default */
+        .close:hover {
+            color: #fff;
+        }
 
         .modal-body {
             color: #d1d5db;
@@ -127,15 +128,25 @@
             text-decoration: none;
             font-weight: 600;
             transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-            /* These styles are moved from :hover to be always on */
-            transform: translateY(-2px) scale(1.02);
-            border: 2px solid rgba(255, 255, 255, 0.4);
-            box-shadow: 0 6px 20px rgba(39, 117, 202, 0.4);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 4px 15px rgba(39, 117, 202, 0.2);
             position: relative;
             overflow: hidden;
         }
 
-        /* Removed .prev-lb-btn:hover rule as styles are now default */
+        .prev-lb-btn:hover {
+            transform: translateY(-2px) scale(1.02);
+            background: rgb(39, 117, 202);
+            box-shadow: 0 6px 20px rgba(39, 117, 202, 0.4);
+            border-color: rgba(255, 255, 255, 0.4);
+            text-decoration: none;
+            color: black;
+        }
+
+        .prev-lb-btn:hover svg {
+            transform: scale(1.1);
+            stroke: black;
+        }
 
         .prev-lb-btn:active {
             transform: translateY(0) scale(0.98);
@@ -145,13 +156,7 @@
             width: 18px;
             height: 18px;
             transition: transform 0.2s ease;
-            /* These styles are moved from :hover to be always on */
-            transform: scale(1.1);
-            stroke: black;
         }
-
-        /* Removed .prev-lb-btn:hover svg rule as styles are now default */
-
 
         @keyframes float {
             0% {
@@ -258,35 +263,6 @@
         .wager-rewards-table td:first-child {
             font-weight: bold;
             color: #fff;
-        }
-
-        /* Socials */
-        .footer-socials {
-            display: flex;
-            flex-direction: column;
-            gap: 14px;
-            margin-top: 10px;
-        }
-
-        .footer-socials a.social {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            text-decoration: none;
-            color: white;
-            font-weight: bold;
-            font-size: 14px;
-            transition: transform 0.2s;
-            /* This style is moved from :hover to be always on */
-            transform: translateX(4px);
-        }
-
-        /* Removed .footer-socials a.social:hover rule as style is now default */
-
-        .footer-socials .social-img {
-            width: 22px;
-            height: 22px;
-            object-fit: contain;
         }
     </style>
 </head>
@@ -422,6 +398,35 @@
             <a data-v-5867ad71="" href="/" class=""><span data-v-5867ad71="" class="subtitle">Privacy
                     Policy</span></a>
         </div>
+        <style>
+            .footer-socials {
+                display: flex;
+                flex-direction: column;
+                gap: 14px;
+                margin-top: 10px;
+            }
+
+            .footer-socials a.social {
+                display: flex;
+                align-items: center;
+                gap: 10px;
+                text-decoration: none;
+                color: white;
+                font-weight: bold;
+                font-size: 14px;
+                transition: transform 0.2s;
+            }
+
+            .footer-socials a.social:hover {
+                transform: translateX(4px);
+            }
+
+            .footer-socials .social-img {
+                width: 22px;
+                height: 22px;
+                object-fit: contain;
+            }
+        </style>
 
         <div class="col">
             <span class="title">Socials</span>
