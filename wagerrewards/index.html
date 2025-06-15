@@ -91,15 +91,16 @@
         }
 
         .close {
-            color: #fff; /* Always white */
+            color: #aaa;
             font-size: 28px;
             font-weight: bold;
             cursor: pointer;
-            /* No transition needed if it's always white and doesn't change on hover */
-            /* transition: color 0.2s ease; */
+            transition: color 0.2s ease;
         }
 
-        /* Removed .close:hover rule as color is now default */
+        .close:hover {
+            color: #fff;
+        }
 
         .modal-body {
             color: #d1d5db;
@@ -127,15 +128,25 @@
             text-decoration: none;
             font-weight: 600;
             transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-            /* These styles are moved from :hover to be always on */
-            transform: translateY(-2px) scale(1.02);
-            border: 2px solid rgba(255, 255, 255, 0.4);
-            box-shadow: 0 6px 20px rgba(39, 117, 202, 0.4);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 4px 15px rgba(39, 117, 202, 0.2);
             position: relative;
             overflow: hidden;
         }
 
-        /* Removed .prev-lb-btn:hover rule as styles are now default */
+        .prev-lb-btn:hover {
+            transform: translateY(-2px) scale(1.02);
+            background: rgb(39, 117, 202);
+            box-shadow: 0 6px 20px rgba(39, 117, 202, 0.4);
+            border-color: rgba(255, 255, 255, 0.4);
+            text-decoration: none;
+            color: black;
+        }
+
+        .prev-lb-btn:hover svg {
+            transform: scale(1.1);
+            stroke: black;
+        }
 
         .prev-lb-btn:active {
             transform: translateY(0) scale(0.98);
@@ -145,13 +156,7 @@
             width: 18px;
             height: 18px;
             transition: transform 0.2s ease;
-            /* These styles are moved from :hover to be always on */
-            transform: scale(1.1);
-            stroke: black;
         }
-
-        /* Removed .prev-lb-btn:hover svg rule as styles are now default */
-
 
         @keyframes float {
             0% {
@@ -212,81 +217,49 @@
             }
         }
 
-        /* Wager Rewards Table Styles */
-        .wager-rewards-container {
-            background: linear-gradient(135deg, #1f2937, #111827);
-            border-radius: 12px;
-            padding: 30px;
-            max-width: 700px;
-            margin: 40px auto;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
-            text-align: center;
-        }
-
-        .wager-rewards-container h2 {
-            font-size: 36px;
-            color: #00eaff;
-            margin-bottom: 30px;
-            text-shadow: 0 0 15px #00eaff;
-        }
-
-        .wager-rewards-table {
+        .wager-table {
             width: 100%;
+            max-width: 600px;
+            margin: 30px auto;
             border-collapse: collapse;
-            margin-top: 20px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
         }
 
-        .wager-rewards-table th,
-        .wager-rewards-table td {
+        .wager-table th,
+        .wager-table td {
             padding: 15px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            color: #d1d5db;
-            font-size: 18px;
-        }
-
-        .wager-rewards-table th {
-            background-color: rgba(39, 117, 202, 0.3);
+            text-align: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
             color: #fff;
-            font-weight: bold;
-            font-size: 20px;
+            font-size: 1.1em;
         }
 
-        .wager-rewards-table tr:nth-child(even) {
+        .wager-table th {
+            background-color: rgba(39, 117, 202, 0.7);
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .wager-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .wager-table tr:nth-child(even) {
             background-color: rgba(0, 0, 0, 0.1);
         }
 
-        .wager-rewards-table td:first-child {
+        .wager-table td:first-child {
             font-weight: bold;
-            color: #fff;
+            color: #ff8e3c;
         }
 
-        /* Socials */
-        .footer-socials {
-            display: flex;
-            flex-direction: column;
-            gap: 14px;
-            margin-top: 10px;
-        }
-
-        .footer-socials a.social {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            text-decoration: none;
-            color: white;
+        .wager-table td:last-child {
+            color: #00eaff;
             font-weight: bold;
-            font-size: 14px;
-            transition: transform 0.2s;
-            /* This style is moved from :hover to be always on */
-            transform: translateX(4px);
-        }
-
-        /* Removed .footer-socials a.social:hover rule as style is now default */
-
-        .footer-socials .social-img {
-            width: 22px;
-            height: 22px;
-            object-fit: contain;
         }
     </style>
 </head>
@@ -298,13 +271,17 @@
     <div id="rulesModal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
-                <h2 class="modal-title">Wager Rewards Information</h2>
+                <h2 class="modal-title">Wager Rewards Rules</h2>
                 <span class="close">×</span>
             </div>
             <div class="modal-body">
-                <p>These rewards are based on your total wagered amount using the code **MOJOTX** on Rainbet.</p>
-                <p><strong>Important:</strong> Must be on code MOJOTX.</p>
-                <p>The rewards are cumulative and based on the tiers shown. Wagered amounts are updated regularly.</p>
+                <p>These are the rewards for specific wagered amounts. Ensure you are on code MOJOTX to qualify!</p>
+                <ul>
+                    <li>Rewards are based on total wagered amount.</li>
+                    <li>Rewards are cumulative across the month.</li>
+                    <li>Must be on code MOJOTX to be eligible.</li>
+                    <li>Rewards will be paid out at the end of each month.</li>
+                </ul>
             </div>
         </div>
     </div>
@@ -338,13 +315,13 @@
             <div data-v-1d580398="" class="row text">
                 <span data-v-1d580398="" class="title">
                     <div data-v-1d580398="" class="price-wrapper glow">
-                        Exclusive Wager Rewards
-                    </div> with Code <span class="glow">MOJOTX</span>!
+                        Wager Rewards
+                    </div> with <span class="glow">MOJOTX</span>!
                 </span>
-                <span data-v-1d580398="" class="subtitle" style="color: #FFF;">Every **BET** on Rainbet under Code
-                    **MOJOTX**
+                <span data-v-1d580398="" class="subtitle" style="color: #FFF;">Every <b>BET</b> on Rainbet under Code
+                    <b>MOJOTX</b>
                     counts towards your rewards. <br>
-                    <i>Your wagered total updates frequently.</i><br>
+                    <i>Rewards are paid out monthly.</i><br>
                     <div class="warning-message">
                         Every Bet Counts!
                     </div>
@@ -358,53 +335,48 @@
                             <line x1="16" y1="17" x2="8" y2="17"></line>
                             <polyline points="10 9 9 9 8 9"></polyline>
                         </svg>
-                        REWARDS INFO
+                        RULES
                     </button>
                 </span>
-
-                <div class="wager-rewards-container">
-                    <h2>Wager Reward Tiers</h2>
-                    <table class="wager-rewards-table">
-                        <thead>
-                            <tr>
-                                <th>Wagered Amount</th>
-                                <th>Reward</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>$5,000</td>
-                                <td>$10</td>
-                            </tr>
-                            <tr>
-                                <td>$10,000</td>
-                                <td>$20</td>
-                            </tr>
-                            <tr>
-                                <td>$50,000</td>
-                                <td>$75</td>
-                            </tr>
-                            <tr>
-                                <td>$100,000</td>
-                                <td>$150</td>
-                            </tr>
-                            <tr>
-                                <td>$250,000</td>
-                                <td>$500</td>
-                            </tr>
-                            <tr>
-                                <td>$500,000</td>
-                                <td>$1,000</td>
-                            </tr>
-                            <tr>
-                                <td>$1,000,000</td>
-                                <td>$2,000</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-
             </div>
+            <table class="wager-table">
+                <thead>
+                    <tr>
+                        <th>Wagered Amount</th>
+                        <th>Reward</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>$5,000</td>
+                        <td>$10</td>
+                    </tr>
+                    <tr>
+                        <td>$10,000</td>
+                        <td>$20</td>
+                    </tr>
+                    <tr>
+                        <td>$50,000</td>
+                        <td>$75</td>
+                    </tr>
+                    <tr>
+                        <td>$100,000</td>
+                        <td>$150</td>
+                    </tr>
+                    <tr>
+                        <td>$250,000</td>
+                        <td>$500</td>
+                    </tr>
+                    <tr>
+                        <td>$500,000</td>
+                        <td>$1,000</td>
+                    </tr>
+                    <tr>
+                        <td>$1,000,000</td>
+                        <td>$2,000</td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
     </div>
     <div data-v-5867ad71="" class="row inner-footer">
@@ -422,6 +394,35 @@
             <a data-v-5867ad71="" href="/" class=""><span data-v-5867ad71="" class="subtitle">Privacy
                     Policy</span></a>
         </div>
+        <style>
+            .footer-socials {
+                display: flex;
+                flex-direction: column;
+                gap: 14px;
+                margin-top: 10px;
+            }
+
+            .footer-socials a.social {
+                display: flex;
+                align-items: center;
+                gap: 10px;
+                text-decoration: none;
+                color: white;
+                font-weight: bold;
+                font-size: 14px;
+                transition: transform 0.2s;
+            }
+
+            .footer-socials a.social:hover {
+                transform: translateX(4px);
+            }
+
+            .footer-socials .social-img {
+                width: 22px;
+                height: 22px;
+                object-fit: contain;
+            }
+        </style>
 
         <div class="col">
             <span class="title">Socials</span>
@@ -495,3 +496,5 @@
 <script src="/js/app.js"></script>
 <script src="/js/particles.js"></script>
 <script src="/js/toast.js"></script>
+
+</html>
